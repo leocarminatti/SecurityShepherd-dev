@@ -3,6 +3,7 @@ package servlets.module;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -145,9 +146,16 @@ extends HttpServlet
 			//The details of this user need to be entered in a properties file in WEB-INF/challenges
 			//The Name of that user need to be entered in the following funciton;
 			Connection conn = Database.getChallengeConnection(applicationRoot, "nameOfPropertiesFile.properties");
-			Statement stmt;
-			stmt = conn.createStatement();
-			ResultSet resultSet = stmt.executeQuery("SELECT * FROM tb_users WHERE username = '" + username + "'");
+			
+			//#Hackathon DK - SQL Injection
+			String query = "SELECT * FROM tb_users WHERE username =?";
+			PreparedStatement stmt = conn.prepareStatement(query);
+			stmt.setString(1, username);			
+			ResultSet resultSet = stmt.executeQuery();			
+			//Statement stmt;
+			//stmt = conn.createStatement();
+			//ResultSet resultSet = stmt.executeQuery("SELECT * FROM tb_users WHERE username = '" + username + "'");
+			
 			log.debug("Opening Result Set from query");
 			for(int i = 0; resultSet.next(); i++)
 			{

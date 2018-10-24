@@ -213,8 +213,15 @@ public class SessionManagement6SecretQuestion extends HttpServlet
 							{
 								Connection conn = Database.getChallengeConnection(ApplicationRoot, "BrokenAuthAndSessMangChalSix");
 								log.debug("Getting Secret Question");
-								PreparedStatement callstmt = conn.prepareStatement("SELECT secretQuestion FROM users WHERE userAddress = \"" + subEmail +"\"");
-								ResultSet rs = callstmt.executeQuery();
+								
+								//#Hackathon DK - SQL Injection
+								String query = "SELECT secretQuestion FROM users WHERE userAddress =?";
+								PreparedStatement stmt = conn.prepareStatement(query);
+								stmt.setString(1, subEmail);			
+								ResultSet rs = stmt.executeQuery();								
+								//PreparedStatement callstmt = conn.prepareStatement("SELECT secretQuestion FROM users WHERE userAddress = \"" + subEmail +"\"");
+								//ResultSet rs = callstmt.executeQuery();
+								
 								if(rs.next())
 								{
 									log.debug("'Valid' User Detected");

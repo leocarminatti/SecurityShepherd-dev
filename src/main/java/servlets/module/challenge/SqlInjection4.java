@@ -3,6 +3,7 @@ package servlets.module.challenge;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -92,9 +93,16 @@ public class SqlInjection4 extends HttpServlet
 				
 				log.debug("Getting Connection to Database");
 				Connection conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeFour");
-				Statement stmt = conn.createStatement();
+				//Statement stmt = conn.createStatement();
 				log.debug("Gathering result set");
-				ResultSet resultSet = stmt.executeQuery("SELECT userName FROM users WHERE userName = '" + theUserName + "' AND userPassword = '" + thePassword + "'");
+				
+				//#Hackathon DK - SQL Injection
+				String query = "SELECT userName FROM users WHERE userName =? AND userPassword =?";
+				PreparedStatement stmt = conn.prepareStatement(query);
+				stmt.setString(1, theUserName);
+				stmt.setString(2, thePassword);
+				ResultSet resultSet = stmt.executeQuery();					
+				//ResultSet resultSet = stmt.executeQuery("SELECT userName FROM users WHERE userName = '" + theUserName + "' AND userPassword = '" + thePassword + "'");
 		
 				int i = 0;
 				htmlOutput = "<h2 class='title'>" + bundle.getString("response.loginResults")+ "</h2>";
