@@ -147,6 +147,8 @@ public class Getter
 					return result;
 				}
 			}
+			callstmt.close();
+			conn.close();
 		} 
 		catch (SQLException e) 
 		{
@@ -375,13 +377,15 @@ public class Getter
 	{
 		ResultSet result = null;
 		log.debug("*** Getter.getClassInfo (All Classes) ***");
-		Connection conn = Database.getCoreConnection(ApplicationRoot);
 		try
 		{
+			Connection conn = Database.getCoreConnection(ApplicationRoot);
 			CallableStatement callstmt = conn.prepareCall("call classesGetData()");
 			log.debug("Gathering classesGetData ResultSet");
 			result = callstmt.executeQuery();
 			log.debug("Returning Result Set from classesGetData");
+			callstmt.close();
+			conn.close();
 		}
 		catch (SQLException e)
 		{

@@ -99,6 +99,8 @@ public class DirectObject2 extends HttpServlet
 				}
 				log.debug("Outputting HTML");
 				out.write(htmlOutput);
+				prepstmt.close();
+				resultSet.close();
 				Database.closeConnection(conn);
 			}
 			catch(Exception e)

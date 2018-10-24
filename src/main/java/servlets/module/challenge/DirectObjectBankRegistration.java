@@ -68,17 +68,19 @@ public class DirectObjectBankRegistration extends HttpServlet
 			log.debug(levelName + " servlet accessed by: " + ses.getAttribute("userName").toString());
 			PrintWriter out = response.getWriter();
 			out.print(getServletInfo());
+
+			String accountHolder = request.getParameter("accountHolder");
+			log.debug("Account Holder - " + accountHolder);
+			String accountPass = request.getParameter("accountPass");
+			log.debug("Account Pass - " + accountPass);
+			String applicationRoot = getServletContext().getRealPath("");
+			String htmlOutput = new String();
+				
+			Connection conn = Database.getChallengeConnection(applicationRoot, "directObjectBank");
+			CallableStatement callstmt;
 			try
 			{
-				String accountHolder = request.getParameter("accountHolder");
-				log.debug("Account Holder - " + accountHolder);
-				String accountPass = request.getParameter("accountPass");
-				log.debug("Account Pass - " + accountPass);
-				String applicationRoot = getServletContext().getRealPath("");
-				String htmlOutput = new String();
-				
-				Connection conn = Database.getChallengeConnection(applicationRoot, "directObjectBank");
-				CallableStatement callstmt = conn.prepareCall("CALL createAccount(?, ?)");
+				callstmt=conn.prepareCall("CALL createAccount(?, ?)");
 				callstmt.setString(1, accountHolder);
 				callstmt.setString(2, accountPass);
 				callstmt.execute();
@@ -86,6 +88,8 @@ public class DirectObjectBankRegistration extends HttpServlet
 				log.debug("Outputting HTML");
 				htmlOutput = bundle.getString("register.accountCreated");
 				out.write(htmlOutput);
+				callstmt.close();
+				conn.close();
 				Database.closeConnection(conn);
 			}
 			catch(SQLException e)

@@ -90,7 +90,10 @@ public class SecurityMisconfigStealTokens extends HttpServlet
 						break; //End Loop, because we found the token
 					}
 				}
-				String cookieValue = theToken.getValue();
+				String cookieValue = new String();
+				if(null!=theToken) {
+					theToken.getValue();
+				}
 				
 				log.debug("User Submitted Cookie: " + cookieValue);
 				log.debug("Stored Cookie Value  : " + userActualCookie);
@@ -161,6 +164,7 @@ public class SecurityMisconfigStealTokens extends HttpServlet
 			}
 			else
 			{
+				conn.close();
 				log.error("No Results From Call");
 				throw new SQLException("No results from getToken Call. Empty Result Set");
 			}
@@ -168,6 +172,7 @@ public class SecurityMisconfigStealTokens extends HttpServlet
 		} 
 		catch (SQLException e) 
 		{
+			conn.close();
 			log.error("Could not get user SecurityMisconfigStealToken token: " + e.toString());
 			throw e;
 		}
@@ -207,6 +212,7 @@ public class SecurityMisconfigStealTokens extends HttpServlet
 			}
 			else
 			{
+				conn.close();
 				log.error("No Results From validToken Call");
 				throw new SQLException("No results from validToken Call. Empty Result Set");
 			}
@@ -214,6 +220,7 @@ public class SecurityMisconfigStealTokens extends HttpServlet
 		} 
 		catch (SQLException e) 
 		{
+			conn.close();
 			log.error("Could not verify token: " + e.toString());
 			throw e;
 		}

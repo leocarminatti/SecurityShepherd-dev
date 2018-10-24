@@ -302,7 +302,7 @@ public class BrokenCryptoHomeMade extends HttpServlet
 		try 
 		{
 			decryptedUserName = decrypt(userNameKey, encyptedUserName);
-			log.debug("Decrypted user-name to: " + decryptedUserName);
+//			log.debug("Decrypted user-name to: " + decryptedUserName);//Não deve ser escrito em log
 		} 
 		catch (GeneralSecurityException e)
 		{

@@ -74,16 +74,17 @@ public class DirectObjectBankLogin extends HttpServlet
 			log.debug(levelName + " servlet accessed by: " + ses.getAttribute("userName").toString());
 			PrintWriter out = response.getWriter();
 			out.print(getServletInfo());
-			try
-			{
-				String accountHolder = request.getParameter("accountHolder");
-				log.debug("Account Holder - " + accountHolder);
-				String accountPass = request.getParameter("accountPass");
-				log.debug("Account Pass - " + accountPass);
-				String applicationRoot = getServletContext().getRealPath("");
-				String htmlOutput = new String();
-				
-				Connection conn = Database.getChallengeConnection(applicationRoot, "directObjectBank");
+//			try
+//			{
+			String accountHolder = request.getParameter("accountHolder");
+			log.debug("Account Holder - " + accountHolder);
+			String accountPass = request.getParameter("accountPass");
+			log.debug("Account Pass - " + accountPass);
+			String applicationRoot = getServletContext().getRealPath("");
+			String htmlOutput = new String();
+			
+			Connection conn = Database.getChallengeConnection(applicationRoot, "directObjectBank");
+			try {
 				CallableStatement callstmt = conn.prepareCall("CALL bankAuth(?, ?)");
 				callstmt.setString(1, accountHolder);
 				callstmt.setString(2, accountPass);
@@ -103,6 +104,9 @@ public class DirectObjectBankLogin extends HttpServlet
 				}
 				log.debug("Outputting HTML");
 				out.write(htmlOutput);
+				resultSet.close();
+				callstmt.close();
+				conn.close();
 				Database.closeConnection(conn);
 			}
 			catch(SQLException e)
@@ -236,9 +240,13 @@ public class DirectObjectBankLogin extends HttpServlet
 			{
 				throw new SQLException("Could not Get Funds. No Rows Found From Query");
 			}
+			rs.close();
+			callstmt.close();
+			conn.close();
 		} 
 		catch (SQLException e) 
 		{
+			conn.close();
 			throw e;
 		}
 		conn.close();

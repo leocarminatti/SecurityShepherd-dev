@@ -199,11 +199,18 @@ public class Validate
 	public static String makeValidUrl(String theUrl)
 	{
 		theUrl = theUrl.toLowerCase();
-		if (!theUrl.startsWith("http"))
+//		if (!theUrl.startsWith("http"))
+//		{
+//			theUrl = "http" + theUrl;
+//			log.debug("Transformed to: " + theUrl);
+//		}
+		final String http = "http";
+		if (!theUrl.startsWith(http))
 		{
 			theUrl = "http" + theUrl;
 			log.debug("Transformed to: " + theUrl);
 		}
+
 		return theUrl;
 	}
 	

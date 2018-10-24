@@ -109,11 +109,12 @@ public class DirectObjectBankTransfer extends HttpServlet
 					errorMessage = bundle.getString("transfer.error.moreThanZero");
 				
 				String htmlOutput = new String();
+				Connection conn = Database.getChallengeConnection(applicationRoot, "directObjectBank");
+				CallableStatement callstmt = conn.prepareCall("CALL transferFunds(?, ?, ?)");
 				if(performTransfer)
 				{
 					log.debug("Valid Data Submitted, transfering Funds...");
-					Connection conn = Database.getChallengeConnection(applicationRoot, "directObjectBank");
-					CallableStatement callstmt = conn.prepareCall("CALL transferFunds(?, ?, ?)");
+					
 					callstmt.setString(1, senderAccountNumber);
 					callstmt.setString(2, recieverAccountNumber);
 					callstmt.setFloat(3, tranferAmount);
@@ -127,6 +128,8 @@ public class DirectObjectBankTransfer extends HttpServlet
 					log.debug("Invalid Data Detected: " + errorMessage);
 					htmlOutput = bundle.getString("transfer.error.occurred") + " " + errorMessage;
 				}
+				callstmt.close();
+				conn.close();
 				log.debug("Outputting HTML");
 				out.write(htmlOutput);
 			}

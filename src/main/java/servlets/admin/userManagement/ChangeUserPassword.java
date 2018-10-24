@@ -72,7 +72,7 @@ public class ChangeUserPassword extends HttpServlet
 					String player = (String)request.getParameter("player");
 					log.debug("player = " + player.toString());
 					String newPassword = (String)request.getParameter("password");
-					log.debug("newPass = " + newPassword);
+//					log.debug("newPass = " + newPassword);//Não deve ser escrito no log
 					
 					//Validation
 					notNull = (player != null) && (newPassword != null);

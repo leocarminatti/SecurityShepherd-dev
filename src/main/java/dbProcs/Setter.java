@@ -274,6 +274,9 @@ public class Setter
 	{
 		try 
 		{
+			final String userAsString = new String(userName);
+			final String passwordAsString = new String(password);
+			
 			//Update Database Settings
 			File siteProperties = new File(applicationRoot + "/WEB-INF/database.properties");
 			DataOutputStream writer = new DataOutputStream(new FileOutputStream(siteProperties,false));
@@ -285,8 +288,8 @@ public class Setter
 			siteProperties = new File(applicationRoot + "/WEB-INF/coreDatabase.properties");
 			writer = new DataOutputStream(new FileOutputStream(siteProperties,false));
 			theProperties = new String("databaseConnectionURL=core"+					
-					"\ndatabaseUsername=" + userName +
-					"\ndatabasePassword=" + password);
+					"\ndatabaseUsername=" + userAsString +
+					"\ndatabasePassword=" + passwordAsString);
 			writer.write(theProperties.getBytes());
 			writer.close();
 			return true;

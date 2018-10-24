@@ -74,7 +74,7 @@ public class SessionManagement2ChangePassword extends HttpServlet
 			PrintWriter out = response.getWriter();  
 			out.print(getServletInfo());
 			
-			String htmlOutput = new String();
+//			String htmlOutput = new String();
 			log.debug(levelName + " Servlet accessed");
 			try
 			{
@@ -105,7 +105,7 @@ public class SessionManagement2ChangePassword extends HttpServlet
 					callstmt.execute();
 					log.debug("Changes committed.");
 					
-					htmlOutput = Encode.forHtml(newPassword);
+//					htmlOutput = Encode.forHtml(newPassword);
 					Database.closeConnection(conn);
 				}
 				catch(SQLException e)
@@ -113,7 +113,8 @@ public class SessionManagement2ChangePassword extends HttpServlet
 					log.error(levelName + " SQL Error: " + e.toString());
 				}
 				log.debug("Outputting HTML");
-				out.write(bundle.getString("response.changedTo") + " " + htmlOutput);
+//				out.write(bundle.getString("response.changedTo") + " " + htmlOutput);
+				out.write(bundle.getString("response.changedTo") + " Senha alterada com sucesso");
 			}
 			catch(Exception e)
 			{

@@ -130,8 +130,11 @@ public class BrokenCrypto4 extends HttpServlet
 				catch(Exception e)
 				{
 					log.debug("Could Not Find Coupon: " + e.toString());
+					conn.close();
 				}
-				conn.close();
+				finally{
+					conn.close();
+				}
 				
 				//Work Out Final Cost
 				megustaCost = megustaCost - (megustaCost * (perCentOffMegusta/100));
