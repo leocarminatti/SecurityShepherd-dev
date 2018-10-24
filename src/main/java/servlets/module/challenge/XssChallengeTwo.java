@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
 import dbProcs.Getter;
 import utils.FindXSS;
@@ -47,6 +49,16 @@ public class XssChallengeTwo extends HttpServlet
 	private static org.apache.log4j.Logger log = Logger.getLogger(XssChallengeTwo.class);
 	private static String levelName = "Cross Site Scripting Challenge Two";
 	private static String levelHash = "t227357536888e807ff0f0eff751d6034bafe48954575c3a6563cb47a85b1e888";
+	
+	// OWASP Sanitizer
+			PolicyFactory policy = new HtmlPolicyBuilder()
+					.allowElements("a", "img")
+					.allowUrlProtocols("https")
+					.allowAttributes("href", "src")
+					.onElements("a", "img")
+					.requireRelNofollowOnLinks()
+					.toFactory();
+	
 	/**
 	 * Cross Site Request Forgery safe Reflected XSS vulnerability. As there is no CSRF risk, this XSS flaw cannot be remotely exploited, and therefore is only is executable against the person initiating the function.
 	 * @param searchTerm To be spat back out at the user after been filtered
@@ -100,7 +112,7 @@ public class XssChallengeTwo extends HttpServlet
 						searchTerm +
 						"</p>";
 					log.debug("Outputting HTML");
-					out.write(htmlOutput);
+					out.write(policy.sanitize(htmlOutput));
 				}
 			}
 			else
