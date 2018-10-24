@@ -2,6 +2,8 @@ package servlets.module.challenge;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -88,20 +90,39 @@ public class NoSqlInjection1 extends HttpServlet
 			
 			String user;        // the user name
 			String database;    // the name of the database in which the user is defined
-			char[] password;    // the password as a character array
 			
-			try{
+			//char[] password;    // the password as a character array
+			/* ## CORREÇÃO ##
+			 * A correção dessa vulnerabilidade seria externalizar a senha em um arquivo cripotrafado
+			 * com criptografia SHA-256 ou criar um HASH usando a classe MessageDigest do Java e guarda-lo no
+			 * no banco de dados, conforme ideia basica abaixo: 
+			 * 
+		     */			
 			
+			String password = null;    // the password as a character array
+			MessageDigest algoritimo;
+			Object messageDigest = null;
+			
+			try {
+				algoritimo = MessageDigest.getInstance("SHA-256");
+				messageDigest = algoritimo.digest(password.getBytes("UTF-8"));
+				
+			} catch (NoSuchAlgorithmException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
+			try{			
 				log.debug("Getting Connection to Mongo Database");
 				// To directly connect to a single MongoDB server (note that this will not auto-discover the primary even
 				// if it's a member of a replica set:
 				mongoClient = new MongoClient();
 				
 				user = "gamer1";
-				database = "shepherdGames";
-				password = new char[]{ '$', 'e', 'c', 'S', 'h', '3', 'p', 'd', 'b' };
+				database = "shepherdGames";				
 				
-				credential = MongoCredential.createCredential(user, database, password);
+				credential = MongoCredential.createCredential(user, database, (char[]) messageDigest);
 				mongoDb = mongoClient.getDB("shepherdGames");
 				coll = mongoDb.getCollection("gamer");
 				
