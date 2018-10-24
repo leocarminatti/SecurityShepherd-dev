@@ -16,7 +16,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.owasp.encoder.Encode;
-
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
 import utils.ShepherdLogManager;
 import utils.Validate;
@@ -49,6 +50,16 @@ public class DirectObject2 extends HttpServlet
 	private static org.apache.log4j.Logger log = Logger.getLogger(DirectObject2.class);
 	private static String levelName = "Insecure Direct Object Reference Challenge Two";
 	public static String levelHash = "vc9b78627df2c032ceaf7375df1d847e47ed7abac2a4ce4cb6086646e0f313a4";
+	
+	// OWASP Sanitizer
+		PolicyFactory policy = new HtmlPolicyBuilder()
+				.allowElements("a", "img")
+				.allowUrlProtocols("https")
+				.allowAttributes("href", "src")
+				.onElements("a", "img")
+				.requireRelNofollowOnLinks()
+				.toFactory();
+		
 	/**
 	 * The user must abuse this functionality to reveal a hidden user. The result key is hidden in this users profile.
 	 * @param userId To be used in generating the HTML output
@@ -98,7 +109,7 @@ public class DirectObject2 extends HttpServlet
 					htmlOutput = "<h2 class='title'>" + bundle.getString("response.notFound") + "</h2><p>" + bundle.getString("response.notFoundMessage.1") + " '" + Encode.forHtml(userId) + "' " + bundle.getString("response.notFoundMessage.2") + "</p>";
 				}
 				log.debug("Outputting HTML");
-				out.write(htmlOutput);
+				out.write(policy.sanitize(htmlOutput));
 				Database.closeConnection(conn);
 			}
 			catch(Exception e)
