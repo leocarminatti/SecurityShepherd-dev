@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=iso-8859-1" language="java" import="servlets.Register,java.sql.*,java.io.*,java.net.*,org.owasp.encoder.Encode, dbProcs.*, utils.*" errorPage="" %>
-
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%
 	ShepherdLogManager.logEvent(request.getRemoteAddr(), request.getHeader("X-Forwarded-For"), "DEBUG: scoreboard Config.jsp *************************");
 
@@ -136,7 +136,7 @@ if (request.getSession() != null) //Session If
 						type: "POST",
 						url: "EnableScoreboard",
 						data: {
-							classId: "<%= Register.getDefaultClass() %>",
+							classId: "${fn:escapeXml(Register.getDefaultClass())}",
 							restricted: "true",
 							csrfToken: theCsrfToken
 						},
