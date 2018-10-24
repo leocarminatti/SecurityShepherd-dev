@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 /** 
@@ -41,7 +43,9 @@ public class FileInputProperties
 	public static String readfile(String filename, String Property) 
 	{
 		//log.debug("Debug: Properties filename: "+filename);
-		File file = new File(filename);
+		String path = FilenameUtils.normalize(filename);
+		File file = new File(path);
+		// File file = new File(filename);
 		String temp = "";
 	    String result = "NO RESULT";
 	    FileInputStream fis = null;
