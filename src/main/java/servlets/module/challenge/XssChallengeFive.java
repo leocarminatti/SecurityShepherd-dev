@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
 import dbProcs.Getter;
 import utils.FindXSS;
@@ -46,6 +48,15 @@ public class XssChallengeFive extends HttpServlet
 	private static org.apache.log4j.Logger log = Logger.getLogger(XssChallengeFive.class);
 	private static final String levelHash = "f37d45f597832cdc6e91358dca3f53039d4489c94df2ee280d6203b389dd5671";
 	private static String levelName = "XSS Challenge 5";
+	
+	// OWASP Sanitizer
+			PolicyFactory policy = new HtmlPolicyBuilder()
+					.allowElements("a", "img")
+					.allowUrlProtocols("https")
+					.allowAttributes("href", "src")
+					.onElements("a", "img")
+					.requireRelNofollowOnLinks()
+					.toFactory();
 	/**
 	 * Cross Site Request Forgery safe Reflected XSS vulnerability. cannot be remotely exploited, and there fore only is executable against the person initiating the function.
 	 * @param searchTerm To be spat back out at the user after been encoded for wrong HTML Context
@@ -100,7 +111,7 @@ public class XssChallengeFive extends HttpServlet
 							"<p>" + bundle.getString("response.linkPosted") + "</p> " +
 							userPost +
 							"</p>";
-					out.write(htmlOutput);
+					out.write(policy.sanitize(htmlOutput));
 				}
 			}
 		}
