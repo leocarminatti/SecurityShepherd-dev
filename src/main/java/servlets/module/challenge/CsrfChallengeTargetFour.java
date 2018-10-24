@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
 import utils.Hash;
 import utils.ShepherdLogManager;
@@ -51,6 +53,15 @@ public class CsrfChallengeTargetFour extends HttpServlet
 	private static String moduleHash = "84118752e6cd78fecc3563ba2873d944aacb7b72f28693a23f9949ac310648b5";
 	private static org.apache.log4j.Logger log = Logger.getLogger(CsrfChallengeTargetFour.class);
 	private static String levelName = "CSRF Target 4";
+	
+	// OWASP Sanitizer
+			PolicyFactory policy = new HtmlPolicyBuilder()
+					.allowElements("a", "img")
+					.allowUrlProtocols("https")
+					.allowAttributes("href", "src")
+					.onElements("a", "img")
+					.requireRelNofollowOnLinks()
+					.toFactory();
 	/**
 	 * CSRF vulnerable function that can be used by users to force other users to mark their CSRF challenge Two as complete.
 	 * @param userId User identifier to be incremented
@@ -86,7 +97,7 @@ public class CsrfChallengeTargetFour extends HttpServlet
 				{
 					log.debug("No CSRF Token found in session");
 					storedToken = Setter.setCsrfChallengeFourCsrfToken(userId, Hash.randomString(), ApplicationRoot);
-					out.write(csrfGenerics.getString("target.noTokenNewToken") + " " + storedToken + "<br><br>");
+					out.write(policy.sanitize(csrfGenerics.getString("target.noTokenNewToken") + " " + storedToken + "<br><br>"));
 					ses.setAttribute(csrfTokenName, storedToken);
 				}
 				else

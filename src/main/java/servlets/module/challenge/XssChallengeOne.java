@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
 import dbProcs.Getter;
 import utils.FindXSS;
@@ -47,6 +49,15 @@ public class XssChallengeOne extends HttpServlet
 	private static org.apache.log4j.Logger log = Logger.getLogger(XssChallengeOne.class);
 	private static String levelName = "Cross Site Scripting Challenge One";
 	private static String levelHash = "d72ca2694422af2e6b3c5d90e4c11e7b4575a7bc12ee6d0a384ac2469449e8fa";
+	
+	// OWASP Sanitizer
+				PolicyFactory policy = new HtmlPolicyBuilder()
+						.allowElements("a", "img")
+						.allowUrlProtocols("https")
+						.allowAttributes("href", "src")
+						.onElements("a", "img")
+						.requireRelNofollowOnLinks()
+						.toFactory();
 	/**
 	 * Cross Site Request Forgery safe Reflected XSS vulnerability. cannot be remotly deployed, and therfore only is executable against the person initating the funciton.
 	 * @param searchTerm To be spat back out at the user after been filtered
@@ -99,7 +110,7 @@ public class XssChallengeOne extends HttpServlet
 						searchTerm +
 						"</p>";
 					log.debug("Outputting HTML");
-					out.write(htmlOutput);
+					out.write(policy.sanitize(htmlOutput));
 				}
 			}
 		}
