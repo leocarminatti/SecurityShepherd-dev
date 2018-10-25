@@ -3,7 +3,6 @@
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%
 	// Cross Site Request Forgery Challenge 4
-
 /**
  * This file is part of the Security Shepherd Project.
  * 
@@ -24,12 +23,10 @@
  */
 String levelName = "CSRF Challenge 4";
 String levelHash = "84118752e6cd78fecc3563ba2873d944aacb7b72f28693a23f9949ac310648b5";
-
 //Translation Stuff
 Locale locale = new Locale(Validate.validateLanguage(request.getSession()));
 ResourceBundle bundle = ResourceBundle.getBundle("i18n.challenges.csrf.csrfStrings", locale);
 String i18nLevelName = bundle.getString("title.csrf4");
-
 ShepherdLogManager.logEvent(request.getRemoteAddr(), request.getHeader("X-Forwarded-For"), levelName + " Accessed");
 if (request.getSession() != null)
 {
