@@ -47,6 +47,11 @@ public class CsrfChallengeTargetSeven extends HttpServlet
 	private static String moduleHash = "7d79ea2b2a82543d480a63e55ebb8fef3209c5d648b54d1276813cd072815df3";
 	private static org.apache.log4j.Logger log = Logger.getLogger(CsrfChallengeTargetSeven.class);
 	private static String levelName = "CSRF Seven Target";
+	private static final String USER_ID_NOT_FOUND = "UserId could not be found.";
+	private static final String USER_CSFR_ATTACK = "User CSRF attack failed due to invalid nonce";
+	private static final String USER_ATTACK_THEMSELVES = "User is attacking themselves";
+	
+	
 	/**
 	 * CSRF vulnerable function that can be used by users to force other users to mark their CSRF challenge Two as complete.
 	 * @param userId User identifier to be incremented
@@ -114,17 +119,17 @@ public class CsrfChallengeTargetSeven extends HttpServlet
 						}
 						else
 						{
-							log.error("UserId '" + plusId + "' could not be found.");
+							log.error(USER_ID_NOT_FOUND);
 						}
 					}
 					else
 					{
-						log.debug("User " + plusId + " CSRF attack failed due to invalid nonce");
+						log.debug(USER_CSFR_ATTACK);
 					}
 				}
 				else
 				{
-					log.debug("User " + userId + " is attacking themselves");
+					log.debug(USER_ATTACK_THEMSELVES);
 				}
 				
 				if(result)

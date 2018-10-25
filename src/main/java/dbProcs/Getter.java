@@ -38,6 +38,10 @@ import utils.ScoreboardStatus;
 public class Getter 
 {
 	private static org.apache.log4j.Logger log = Logger.getLogger(Getter.class);
+	
+	private static final String USER_NAME_DIVERGENCE = "User Name retrieved were not the Same. Nulling Result";
+	
+	private static final String HASH_EXCEPTION = "Module Hash Retrieval exception";
 	/**
 	 * Used for scoreboards / progress bars
 	 */
@@ -127,7 +131,7 @@ public class Getter
 						result[3] = "false";
 					if (!result[1].equals(userName)) //If somehow this functionality has been compromised to sign in as other users, this will limit the expoitability. But the method is sql injection safe, so it should be ok
 					{
-						log.fatal("User Name used ("+ userName +") and User Name retrieved ("+ result[1] +") were not the Same. Nulling Result");
+						log.fatal(USER_NAME_DIVERGENCE);
 						result = null;
 					}
 					else
@@ -1074,9 +1078,7 @@ public class Getter
 		}
 		catch(Exception e)
 		{
-			log.error("Module Hash Retrieval: " + e.toString());
-			log.error("moduleID = " + moduleId);
-			log.error("userID = " + userId);
+			log.error(HASH_EXCEPTION);
 		}
 		Database.closeConnection(conn);
 		log.debug("*** END getModuleAddress() ***");

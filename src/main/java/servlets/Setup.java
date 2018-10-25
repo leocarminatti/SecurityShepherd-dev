@@ -31,6 +31,9 @@ import utils.Validate;
 public class Setup extends HttpServlet {
 	private static org.apache.log4j.Logger log = Logger.getLogger(Setup.class);
 	private static final long serialVersionUID = -892181347446991016L;
+	private static final String UUID_GENERATED = "genrated UUID";
+	private static final String UNABLE_AUTH = "Unable to generate auth";
+	private static final String SETUP_FILE_NOT_FOUND = "Could not find setup file";
 
 	public void doPost (HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException {
 		//Translation Stuff
@@ -128,17 +131,17 @@ public class Setup extends HttpServlet {
 			if (!Files.exists(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize(), LinkOption.NOFOLLOW_LINKS)) {
 				UUID randomUUID = UUID.randomUUID();
 				Files.write(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize(), randomUUID.toString().getBytes(), StandardOpenOption.CREATE);
-				log.info("genrated UUID " + randomUUID + " in " + Constants.SETUP_AUTH);
+				log.info(UUID_GENERATED);
 			}
 		} catch (IOException e) {
-			log.fatal("Unable to generate auth");
+			log.fatal(UNABLE_AUTH);
 			e.printStackTrace();
 		}
 	}
 	
 	private static void removeAuthFile() {
 		if (!Files.exists(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize(), LinkOption.NOFOLLOW_LINKS)) {
-			log.info("Could not find " + Constants.SETUP_AUTH);
+			log.info(SETUP_FILE_NOT_FOUND);
 		} else {
 			FileUtils.deleteQuietly(new File(FilenameUtils.normalize(Constants.SETUP_AUTH)));
 		}

@@ -32,6 +32,11 @@ import org.apache.log4j.Logger;
 public class Validate 
 {
 	private static org.apache.log4j.Logger log = Logger.getLogger(Validate.class);
+	private static final String USER_ACCESS_VIOLATION = "User Attempting Admin functions! (CSRF Tokens Not Checked)";
+	privtae static final String USER_ACESS_VIOLATION_BAD_CSRF= "User account " + userName + " accessing admin function with bad CSRF Tokens";
+	private static final String PARAMETERS_VIOLATION = "Tampered Parameter Detected!!! Could not parameters";
+	private static final STring ROLE_PARAMETER = "User Role Parameter Tampered.";
+	
 	/**
 	 * Finds JSession token from user's cookies[], validates and returns.
 	 * @param userCookies Cookies from users browser
@@ -246,11 +251,11 @@ public class Validate
 						String role = (String) ses.getAttribute("userRole");
 						result = (role.compareTo("admin") == 0);
 						if(!result)
-							log.fatal("User " + userName + " Attempting Admin functions! (CSRF Tokens Not Checked)");
+							log.fatal(USER_ACCESS_VIOLATION);
 					} 
 					catch (Exception e) 
 					{
-						log.fatal("Tampered Parameter Detected!!! Could not parameters");
+						log.fatal(PARAMETERS_VIOLATION);
 					}
 				}
 				else
@@ -298,9 +303,9 @@ public class Validate
 							//Check CSRF Tokens of User to ensure they are not being CSRF'd into causing Unauthorised Access Alert
 							boolean validCsrfTokens = validateTokens(cookieToken, requestToken);
 							if(validCsrfTokens)
-								log.fatal("User account " + userName + " Attempting Admin functions! (With Valid CSRF Tokens)");
+								log.fatal(USER_ACCESS_VIOLATION);
 							else
-								log.error("User account " + userName + " accessing admin function with bad CSRF Tokens");
+								log.error(USER_ACESS_VIOLATION_BAD_CSRF);
 						}
 							
 					} 
@@ -448,7 +453,7 @@ public class Validate
 						String role = (String) ses.getAttribute("userRole");
 						result = (role.compareTo("player") == 0 || role.compareTo("admin") == 0);
 						if(!result)
-							log.fatal("User Role Parameter Tampered. Role = " + role);
+							log.fatal(ROLE_PARAMETER);
 						else
 						{
 							String userName = ses.getAttribute("userName").toString();

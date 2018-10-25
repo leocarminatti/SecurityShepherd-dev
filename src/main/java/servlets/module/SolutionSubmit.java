@@ -45,6 +45,8 @@ import dbProcs.Setter;
 public class SolutionSubmit extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
+	private static final String USER_LOST_WARN = "has been warned and potentially has lost points";
+	private static final String BAD_INVOKE = "Invoking Bad Submission procedure...";
 	private static org.apache.log4j.Logger log = Logger.getLogger(SolutionSubmit.class);
 	/**
 	 * Initiated by a dynamic form in index.jsp this method checks the existence of the submitted module identifier before ensuring that the submission is correct
@@ -177,9 +179,9 @@ public class SolutionSubmit extends HttpServlet
 									"Incorrect Solution Key Submitted.<br><br>You have limited amounts of incorrect key submissions before you will loose 10% of your points. Contact the OWASP Security Shepherd if you think you have found the correct key but it is failing you." +
 									"</font></p>");
 							
-							log.error("Invoking Bad Submission procedure...");
+							log.error(BAD_INVOKE);
 							Setter.incrementBadSubmission(ApplicationRoot, userId);
-							log.error(userName + " has been warned and potentially has lost points");
+							log.error(USER_LOST_WARN);
 						}
 					}
 					else
