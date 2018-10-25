@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -72,6 +73,10 @@ public class SqlInjection5CouponCheck extends HttpServlet
 			String htmlOutput = new String();
 			String applicationRoot = getServletContext().getRealPath("");
 			
+			Connection conn = null;
+			PreparedStatement prepstmt = null;
+			ResultSet coupons = null;
+			
 			try
 			{
 				String couponCode = request.getParameter("couponCode");
@@ -80,12 +85,10 @@ public class SqlInjection5CouponCheck extends HttpServlet
 					couponCode = new String();
 				
 				htmlOutput = new String("");
-				Connection conn = Database.getChallengeConnection(applicationRoot, "SqlInjectionChallenge5ShopCoupon");
+				conn = Database.getChallengeConnection(applicationRoot, "SqlInjectionChallenge5ShopCoupon");
 				log.debug("Looking for Coupons Insecurely");
-				//PreparedStatement prepstmt = conn.prepareStatement("SELECT itemId, perCentOff, itemName FROM coupons JOIN items USING (itemId) WHERE couponCode = '" + couponCode + "';");
-				PreparedStatement prepstmt = conn.prepareStatement("SELECT itemId, perCentOff, itemName FROM coupons JOIN items USING (itemId) WHERE couponCode =?;");
-				prepstmt.setString(1, couponCode);
-				ResultSet coupons = prepstmt.executeQuery();
+				prepstmt = conn.prepareStatement("SELECT itemId, perCentOff, itemName FROM coupons JOIN items USING (itemId) WHERE couponCode = '" + couponCode + "';");
+				coupons = prepstmt.executeQuery();
 				try
 				{
 					if(coupons.next())
@@ -105,12 +108,31 @@ public class SqlInjection5CouponCheck extends HttpServlet
 					log.debug("Could Not Find Coupon: " + e.toString());
 					
 				}
-				conn.close();
 			}
 			catch(Exception e)
 			{
 				log.debug("Did complete Check: " + e.toString());
 				htmlOutput = "" + bundle.getString("errors.occured")+ "" + Encode.forHtml(e.toString());
+			}
+			finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
+				try {
+					prepstmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
+				try {
+					coupons.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
 			}
 			try
 			{
