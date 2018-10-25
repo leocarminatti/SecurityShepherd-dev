@@ -140,7 +140,7 @@ public class SetterTest
 								}
 								if(scoreBefore == 0)
 								{
-									log.fatal("Could not find user " + userName + " with score > 0: " + scoreboardData);
+									log.fatal("Could not find user with score > 0 ");
 									fail("User has score of 0 before BadSubmission Emulation");
 								}
 								
@@ -270,7 +270,7 @@ public class SetterTest
 								}
 								if(scoreBefore == 0)
 								{
-									log.fatal("Could not find user " + userName + " with score > 0: " + scoreboardData);
+									log.fatal("Could not find userwith score > 0");
 									fail("User has score of 0 before BadSubmission Emulation");
 								}
 								

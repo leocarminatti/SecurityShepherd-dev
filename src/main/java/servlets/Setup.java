@@ -128,7 +128,7 @@ public class Setup extends HttpServlet {
 			if (!Files.exists(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize(), LinkOption.NOFOLLOW_LINKS)) {
 				UUID randomUUID = UUID.randomUUID();
 				Files.write(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize(), randomUUID.toString().getBytes(), StandardOpenOption.CREATE);
-				log.info("genrated UUID " + randomUUID + " in " + Constants.SETUP_AUTH);
+				log.info("genrated UUID ");
 			}
 		} catch (IOException e) {
 			log.fatal("Unable to generate auth");
@@ -138,7 +138,7 @@ public class Setup extends HttpServlet {
 	
 	private static void removeAuthFile() {
 		if (!Files.exists(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize(), LinkOption.NOFOLLOW_LINKS)) {
-			log.info("Could not find " + Constants.SETUP_AUTH);
+			log.info("Could not find");
 		} else {
 			FileUtils.deleteQuietly(new File(FilenameUtils.normalize(Constants.SETUP_AUTH)));
 		}

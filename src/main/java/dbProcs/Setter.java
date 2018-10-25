@@ -952,8 +952,9 @@ public class Setter {
 		} catch (SQLException sqlEx) {
 			log.fatal("userDelete Failure: " + sqlEx.toString());
 			throw new SQLException(sqlEx);
+		} finally {
+			Database.closeConnection(conn);
 		}
-		Database.closeConnection(conn);
 		log.debug("*** END userDelete ***");
 		return result;
 	}

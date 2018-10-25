@@ -88,7 +88,7 @@ public class CsrfChallengeTargetOne extends HttpServlet
 					}
 					else
 					{
-						log.error("UserId '" + plusId + "' could not be found.");
+						log.error("User could not be found.");
 					}
 				}
 				
