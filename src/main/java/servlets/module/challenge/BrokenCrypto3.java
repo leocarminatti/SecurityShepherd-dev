@@ -79,7 +79,7 @@ public class BrokenCrypto3 extends HttpServlet
 //				log.debug("Decrypted to: " + decryptedUserData);//Não dever ser escrito em log
 				
 				htmlOutput = "<h2 class='title'>" + bundle.getString("insecureCyrptoStorage.3.plaintextResult") + "</h2><p>" + bundle.getString("insecureCyrptoStorage.3.plaintextResult.message") + "<br/><br/><em>"
-						+ Encode.forHtml(decryptedUserData)
+						//+ Encode.forHtml(decryptedUserData)
 						+ "</em></p>";
 				}
 			}
@@ -88,6 +88,7 @@ public class BrokenCrypto3 extends HttpServlet
 				log.fatal(levelName + " - " + e.toString());
 				htmlOutput = errors.getString("error.funky");
 			}
+			// privacy violation - removido parametro de entrada "userData"
 			out.write(htmlOutput);
 		}
 		else

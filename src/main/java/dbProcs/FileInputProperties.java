@@ -70,7 +70,8 @@ public class FileInputProperties
 	      }
 	      if(!bool)
 	      {
-	    	  log.debug("Debug: Property not found: "+Property);
+	    	  // falso positivo, pois nao temos intencao de exibir logs do tipo debug no ambiente de producao
+	    	  //log.debug("Debug: Property not found: "+Property);
 	  	  }
 	      fis.close();
 	      bis.close();

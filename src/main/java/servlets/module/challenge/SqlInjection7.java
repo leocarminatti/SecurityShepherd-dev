@@ -73,9 +73,15 @@ public class SqlInjection7 extends HttpServlet
 			try
 			{
 				String subEmail = Validate.validateParameter(request.getParameter("subEmail"), 60);
-				log.debug("subEmail - " + subEmail.replaceAll("\n", " \\\\n ")); //Escape \n's
+				
+				// Vulnerabilidade Privacy Violation - a variavel de entrada "subEmail" esta sendo apresentada no log
+				// da aplicacao sem necessidade, expondo informacoes potencialmente sensiveis
+				//log.debug("subEmail - " + subEmail.replaceAll("\n", " \\\\n ")); //Escape \n's
 				String subPassword = Validate.validateParameter(request.getParameter("subPassword"), 40);
-				log.debug("subPassword - " + subPassword); 
+				// Vulnerabilidade Privacy Violation - a variavel de entrada "subEmail" esta sendo apresentada no log
+				// da aplicacao sem necessidade, expondo informacoes potencialmente sensiveis
+				//log.debug("subEmail - " + subEmail.replaceAll("\n", " \\\\n ")); //Escape \n's
+				//log.debug("subPassword - " + subPassword); 
 				boolean validEmail = Validate.isValidEmailAddress(subEmail.replaceAll("\n", "")); //Ignore \n 's
 				if(!subPassword.isEmpty() && !subPassword.isEmpty() && validEmail)
 				{

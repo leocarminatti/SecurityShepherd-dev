@@ -86,11 +86,13 @@ public class SqlInjection4 extends HttpServlet
 				String theUserName = request.getParameter("theUserName");
 				log.debug("User Submitted - " + theUserName);
 				theUserName = SqlFilter.levelFour(theUserName);
-				log.debug("Filtered to " + theUserName);
+				//log.debug("Filtered to " + theUserName);
 				String thePassword = request.getParameter("thePassword");
-				log.debug("thePassword Submitted - " + thePassword);
+				//log.debug("thePassword Submitted - " + thePassword);
 				thePassword = SqlFilter.levelFour(thePassword);
-				log.debug("Filtered to " + thePassword);
+				//log.debug("Filtered to " + thePassword);
+				// privacy violation - variaveis de entrada estao sendo exibidas no log
+				// essas informacoes podem ser sensiveis e nao devem ser disponibilizadas
 				
 				log.debug("Servlet root = " + ApplicationRoot );
 				String query = "SELECT userName FROM users WHERE userName =? AND userPassword =?";
