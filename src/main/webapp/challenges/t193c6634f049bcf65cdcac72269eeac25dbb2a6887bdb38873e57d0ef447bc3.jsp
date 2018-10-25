@@ -79,7 +79,7 @@ String i18nLevelName = bundle.getString("challenge.challengeName");
 							<tr><td>
 								<%= bundle.getString("challenge.form.password") %>
 							</td><td>
-								<input type="password" id="subUserPassword"/>
+								<input type="password" id="subUserPassword" autocomplete="off"/>
 							</td></tr>
 							<tr><td colspan="2">
 								<div id="submitButton"><input type="submit" value="<%= bundle.getString("challenge.form.signIn") %>"/></div>
@@ -98,12 +98,12 @@ String i18nLevelName = bundle.getString("challenge.challengeName");
 							<tr><td>
 								<%= bundle.getString("reset.form.new") %>
 							</td><td>
-								<input type="password" id="passOne"/>
+								<input type="password" id="passOne" autocomplete="off"/>
 							</td></tr>
 							<tr><td>
 								<%= bundle.getString("reset.form.confirm") %>
 							</td><td>
-								<input type="password" id="passTwo"/>
+								<input type="password" id="passTwo" autocomplete="off" />
 							</td></tr>
 							<tr><td colspan="2">
 								<div id="resetSubmit"><input type="submit" value="<%= bundle.getString("reset.form.changePass") %>"/></div>
