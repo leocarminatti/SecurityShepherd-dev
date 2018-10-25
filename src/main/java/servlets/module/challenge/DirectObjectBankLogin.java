@@ -21,6 +21,7 @@ import org.owasp.encoder.Encode;
 
 import utils.Hash;
 import utils.ShepherdLogManager;
+import utils.SqlFilter;
 import utils.Validate;
 import dbProcs.Database;
 
@@ -229,7 +230,7 @@ public class DirectObjectBankLogin extends HttpServlet
 		try 
 		{
 			callstmt = conn.prepareCall("CALL currentFunds(?)");
-			callstmt.setString(1, accountNumber);
+			callstmt.setString(1, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(accountNumber)))));
 			ResultSet rs = callstmt.executeQuery();
 			if(rs.next())
 			{

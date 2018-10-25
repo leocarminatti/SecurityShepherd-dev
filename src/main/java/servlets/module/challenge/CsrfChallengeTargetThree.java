@@ -44,9 +44,9 @@ public class CsrfChallengeTargetThree extends HttpServlet
 	private static org.apache.log4j.Logger log = Logger.getLogger(CsrfChallengeTargetThree.class);
 	private static String levelName = "CSRF 3 Target";
 	private static final String USER_ID_NOT_FOUND = "UserId could not be found.";
-	private static final String USER_CSFR_ATTACK = "User CSRF attack failed due to invalid nonce";
+	//private static final String USER_CSFR_ATTACK = "User CSRF attack failed due to invalid nonce";
 	private static final String CSFR_NOT_FOUND = "No CSRF Token found";
-	private static final String USER_ATTACK_THEMSELVES = "User is attacking themselves";
+	//private static final String USER_ATTACK_THEMSELVES = "User is attacking themselves";
 	
 	/**
 	 * CSRF vulnerable function that can be used by users to force other users to mark their CSRF challenge Three as complete.

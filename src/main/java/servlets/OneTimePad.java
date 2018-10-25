@@ -39,7 +39,10 @@ public class OneTimePad {
 	 * @return The resulting string from encryption
 	 */
 	public static String encrypt(final String text) {
-		return new String(org.apache.commons.codec.binary.Base64.encodeBase64String(xor(text.getBytes())).getBytes());
+		byte[] b = xor(text.getBytes());
+		String s = org.apache.commons.codec.binary.Base64.encodeBase64String(b);
+		String end = new String(s.getBytes());
+		return end;
 	}
 
 	/**
@@ -115,7 +118,7 @@ public class OneTimePad {
 
 	private static String getKey() {
 		Properties prop = new Properties();
-		String key = "";
+		String key = new String();
 		InputStream input = null;
 		try {
 

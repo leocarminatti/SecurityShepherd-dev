@@ -2,8 +2,9 @@ package servlets.module.challenge;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.SecureRandom;
+import java.util.Date;
 import java.util.Locale;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 import javax.servlet.ServletException;
