@@ -84,6 +84,8 @@ public class SessionManagement7SecretQuestion extends HttpServlet
 			
 			String htmlOutput = new String();
 			log.debug(levelName + " Servlet accessed");
+			String ApplicationRoot = getServletContext().getRealPath("");
+			Connection conn = Database.getChallengeConnection(ApplicationRoot, "BrokenAuthAndSessMangChalFlowers");
 			try
 			{
 				log.debug("Getting Challenge Parameters");
@@ -97,12 +99,12 @@ public class SessionManagement7SecretQuestion extends HttpServlet
 				if(validAnswer(subAns))
 				{
 					log.debug("Submitted answer is a possible valid answer");
-					String ApplicationRoot = getServletContext().getRealPath("");
+
 					try
 					{
 						if(Validate.isValidEmailAddress(subEmail) && subAns.length() > 5)
 						{
-							Connection conn = Database.getChallengeConnection(ApplicationRoot, "BrokenAuthAndSessMangChalFlowers");
+							
 							log.debug("Checking Secret Answer");
 							PreparedStatement callstmt = conn.prepareStatement("SELECT userName FROM users WHERE userAddress = ? AND secretAnswer = ?");
 							callstmt.setString(1, subEmail);
@@ -153,6 +155,9 @@ public class SessionManagement7SecretQuestion extends HttpServlet
 			{
 				out.write(errors.getString("error.funky"));
 				log.fatal(levelName + " - " + e.toString());
+			}
+			finally {
+				Database.closeConnection(conn);
 			}
 		}
 		else

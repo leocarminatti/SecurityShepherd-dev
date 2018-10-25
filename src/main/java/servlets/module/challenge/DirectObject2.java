@@ -82,16 +82,17 @@ public class DirectObject2 extends HttpServlet
 			log.debug(levelName + " servlet accessed by: " + ses.getAttribute("userName").toString());
 			PrintWriter out = response.getWriter();
 			out.print(getServletInfo());
+			String userId = request.getParameter("userId[]");
+			log.debug("User Submitted - " + userId);
+			String ApplicationRoot = getServletContext().getRealPath("");
+			log.debug("Servlet root = " + ApplicationRoot );
+			String htmlOutput = new String();
+			
+			Connection conn = Database.getChallengeConnection(ApplicationRoot, "directObjectRefChalTwo");
+			PreparedStatement prepstmt = null;
 			try
 			{
-				String userId = request.getParameter("userId[]");
-				log.debug("User Submitted - " + userId);
-				String ApplicationRoot = getServletContext().getRealPath("");
-				log.debug("Servlet root = " + ApplicationRoot );
-				String htmlOutput = new String();
-				
-				Connection conn = Database.getChallengeConnection(ApplicationRoot, "directObjectRefChalTwo");
-				PreparedStatement prepstmt = conn.prepareStatement("SELECT userName, privateMessage FROM users WHERE userId = ?");
+				prepstmt= conn.prepareStatement("SELECT userName, privateMessage FROM users WHERE userId = ?");
 				prepstmt.setString(1, userId);
 				ResultSet resultSet = prepstmt.executeQuery();
 				if(resultSet.next())
@@ -109,19 +110,20 @@ public class DirectObject2 extends HttpServlet
 					htmlOutput = "<h2 class='title'>" + bundle.getString("response.notFound") + "</h2><p>" + bundle.getString("response.notFoundMessage.1") + " '" + Encode.forHtml(userId) + "' " + bundle.getString("response.notFoundMessage.2") + "</p>";
 				}
 				log.debug("Outputting HTML");
-<<<<<<< HEAD
-				out.write(htmlOutput);
-				prepstmt.close();
-				resultSet.close();
-=======
+
 				out.write(policy.sanitize(htmlOutput));
->>>>>>> d5a3e18c811a951ea56985ddbf6ef72f0495d242
+
 				Database.closeConnection(conn);
 			}
 			catch(Exception e)
 			{
 				out.write(errors.getString("error.funky"));
 				log.fatal(levelName + " - " + e.toString());
+			}
+			finally {
+				Database.closeConnection(conn);
+//			    try { prepstmt.close(); } catch (Exception e) { /* ignored */ }
+//			    try { conn.close(); } catch (Exception e) { /* ignored */ }
 			}
 		}
 		else

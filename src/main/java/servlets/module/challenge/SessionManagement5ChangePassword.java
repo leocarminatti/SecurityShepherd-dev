@@ -79,6 +79,11 @@ public class SessionManagement5ChangePassword extends HttpServlet
 			String htmlOutput = new String();
 			String errorMessage = new String();
 			int tokenLife = 11;
+			log.debug("Getting ApplicationRoot");
+			String ApplicationRoot = getServletContext().getRealPath("");
+			log.debug("Servlet root = " + ApplicationRoot );
+			
+			Connection conn = Database.getChallengeConnection(ApplicationRoot, "BrokenAuthAndSessMangChalFive");
 			try
 			{
 				log.debug("Getting Challenge Parameters");
@@ -137,11 +142,7 @@ public class SessionManagement5ChangePassword extends HttpServlet
 					{
 						if(newPass.length() >= 12)
 						{
-							log.debug("Getting ApplicationRoot");
-							String ApplicationRoot = getServletContext().getRealPath("");
-							log.debug("Servlet root = " + ApplicationRoot );
 							
-							Connection conn = Database.getChallengeConnection(ApplicationRoot, "BrokenAuthAndSessMangChalFive");
 							log.debug("Changing password for user: " + userName);
 							log.debug("Changing password to: " + newPass);
 							PreparedStatement callstmt;
@@ -197,6 +198,9 @@ public class SessionManagement5ChangePassword extends HttpServlet
 			{
 				out.write(errors.getString("error.funky"));
 				log.fatal(levelName + " - Change Password - " + e.toString());
+			}
+			finally {
+				Database.closeConnection(conn);
 			}
 		}
 		else
