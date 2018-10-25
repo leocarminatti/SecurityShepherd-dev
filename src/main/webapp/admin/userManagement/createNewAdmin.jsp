@@ -77,7 +77,7 @@ if(ses.getAttribute("errorMessage") != null)
 	<div id="formDiv" class="post">
 		<h1 class="title">Create New Admin</h1>
 		<div id="createUserDiv" class="entry">
-			<form id="theForm" action="javascript:;" autocomplete="off">
+			<form id="theForm" method="post" action="javascript:;" autocomplete="off">
 			<p>Please input what data you want the new administrator to have. Please note that the password will be temporary.</p>
 			<input type="hidden" id="csrfToken" value="<%= csrfToken %>"/>
 				<table align="center">

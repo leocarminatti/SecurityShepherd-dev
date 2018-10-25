@@ -59,7 +59,7 @@ String ApplicationRoot = getServletContext().getRealPath("");
 	<br/>
 	<div id="badData" style="display: none;"></div>
 	<div id="theStep">
-	<form action="javascript:;" id="leForm">
+	<form method="post" action="javascript:;" id="leForm">
 		<table align="center">
 			<tr><td><p>Database URL:</p></td><td><input type="text" id="databaseURL" value=""/></td></tr>
 			<tr><td><p>Username:</p></td><td><input type="text" id="databaseUsername" /></td></tr>
