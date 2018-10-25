@@ -6,6 +6,7 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.commons.io.FileUtils;
@@ -23,13 +24,16 @@ public class TestProperties
 {
 	public static void executeSql(org.apache.log4j.Logger log) throws InstallationException
 	{
+		Connection databaseConnection = null;
+		Statement psProcToexecute = null;
+		
 		try 
 		{
 			File file = new File(System.getProperty("user.dir")+"/src/main/resources/database/coreSchema.sql");
 			String data = FileUtils.readFileToString(file, Charset.defaultCharset() );
 			
-			Connection databaseConnection = Database.getDatabaseConnection(null, true);
-			Statement psProcToexecute = databaseConnection.createStatement();
+			databaseConnection = Database.getDatabaseConnection(null, true);
+			psProcToexecute = databaseConnection.createStatement();
 			psProcToexecute.executeUpdate(data);
 			
 			file = new File(System.getProperty("user.dir")+"/src/main/resources/database/moduleSchemas.sql");
@@ -41,6 +45,20 @@ public class TestProperties
 		catch (Exception e) 
 		{
 			throw new InstallationException(e);
+		}
+		finally {
+			try {
+				databaseConnection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				/*ignored*/
+			}
+			try {
+				psProcToexecute.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				/*ignored*/
+			}
 		}
 	}
 	

@@ -99,7 +99,7 @@ public class NoSqlInjection1 extends HttpServlet
 			 * 
 		     */			
 			
-			String password = null;    // the password as a character array
+			String password = "";    // the password as a character array
 			MessageDigest algoritimo;
 			Object messageDigest = null;
 			

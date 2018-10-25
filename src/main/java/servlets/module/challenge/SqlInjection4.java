@@ -3,9 +3,9 @@ package servlets.module.challenge;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -77,6 +77,10 @@ public class SqlInjection4 extends HttpServlet
 			out.print(getServletInfo());
 			String htmlOutput = new String();
 			
+			Connection conn = null;
+			Statement stmt = null;
+			ResultSet resultSet = null;
+			
 			try
 			{
 				String theUserName = request.getParameter("theUserName");
@@ -84,24 +88,17 @@ public class SqlInjection4 extends HttpServlet
 				theUserName = SqlFilter.levelFour(theUserName);
 				log.debug("Filtered to " + theUserName);
 				String thePassword = request.getParameter("thePassword");
-//				log.debug("thePassword Submitted - " + thePassword);//Não logar senha
+				log.debug("thePassword Submitted - " + thePassword);
 				thePassword = SqlFilter.levelFour(thePassword);
-//				log.debug("Filtered to " + thePassword);//Não logar senha
+				log.debug("Filtered to " + thePassword);
 				String ApplicationRoot = getServletContext().getRealPath("");
 				log.debug("Servlet root = " + ApplicationRoot );
 				
 				log.debug("Getting Connection to Database");
-				Connection conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeFour");
-				//Statement stmt = conn.createStatement();
+				conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeFour");
+				stmt = conn.createStatement();
 				log.debug("Gathering result set");
-				
-				//#Hackathon DK - SQL Injection
-				String query = "SELECT userName FROM users WHERE userName =? AND userPassword =?";
-				PreparedStatement stmt = conn.prepareStatement(query);
-				stmt.setString(1, theUserName);
-				stmt.setString(2, thePassword);
-				ResultSet resultSet = stmt.executeQuery();					
-				//ResultSet resultSet = stmt.executeQuery("SELECT userName FROM users WHERE userName = '" + theUserName + "' AND userPassword = '" + thePassword + "'");
+				resultSet = stmt.executeQuery("SELECT userName FROM users WHERE userName = '" + theUserName + "' AND userPassword = '" + thePassword + "'");
 		
 				int i = 0;
 				htmlOutput = "<h2 class='title'>" + bundle.getString("response.loginResults")+ "</h2>";
@@ -137,6 +134,26 @@ public class SqlInjection4 extends HttpServlet
 			{
 				out.write(errors.getString("error.funky"));
 				log.fatal(levelName + " - " + e.toString());
+			}
+			finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
 			}
 			log.debug("Outputting HTML");
 			out.write(htmlOutput);

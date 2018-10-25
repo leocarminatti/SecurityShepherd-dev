@@ -519,7 +519,7 @@ public class GetterTest
 				String test = Getter.checkPlayerResult(applicationRoot, unOpenedModuleId, userName);
 				if(test != null)
 				{
-					log.fatal("result should be null but it was: " + test);
+					log.fatal("result should be null but it's not");
 					fail("Function says User has opened module they should not have opened by default"); // User Should not have completed this module by default after running a fresh DB. ensure you have a fresh DB if this fails
 				}
 				else
@@ -922,7 +922,7 @@ public class GetterTest
 						}
 						else
 						{
-							log.error("Could not find user name '" + userName + "' in this: " + csrfFourm);
+							log.error("Could not find user name in this: " + csrfFourm);
 							fail("User was not contained in the CSRF iFrame Forum");
 						}
 					}
@@ -990,7 +990,7 @@ public class GetterTest
 							}
 							else
 							{
-								log.error("Could not find user name '" + userName + "' in this: " + csrfFourm);
+								log.error("Could not find user name in this: " + csrfFourm);
 								fail("User was not contained in the CSRF Img Forum");
 							}
 						}
@@ -1051,7 +1051,7 @@ public class GetterTest
 								}
 								else
 								{
-									log.fatal("User's Feedback '" + feedbackSearchCode + "' was not found in: " + feedback);
+									log.fatal("User's Feedback was not found in: " + feedback);
 									fail("Could not find user's feedback");
 								}
 							}
@@ -1541,7 +1541,7 @@ public class GetterTest
 						}
 						if(!pass)
 						{
-							log.error("Could not find " + userName + " in JSON Data: " + scoreboardData);
+							log.error("Could not find in JSON Data: " + scoreboardData);
 							fail("Could not find user in scoreboard");
 						}
 						else
@@ -1727,13 +1727,13 @@ public class GetterTest
 						{
 							if(!pass)
 							{
-								log.error("Could not find " + userName + " in JSON Data: " + scoreboardData);
+								log.error("Could not find username in JSON Data: " + scoreboardData);
 								fail("Could not find user in scoreboard");
 							}
 							else
 							{
 								log.error("Could not see users from other class in total scoreboard data");
-								log.error("Could not find " + otherUserName + " in " + scoreboardData);
+								log.error("Could not find username in " + scoreboardData);
 								fail("Could not see users from other class in total scoreboard data");
 							}
 						}
@@ -1883,32 +1883,32 @@ public class GetterTest
 											}
 											else
 											{
-												log.fatal("Could not find i18n English String in lessons Menu: " + lessonsMenu);
+												log.fatal("Could not find i18n English String in lessons Menu");
 												fail("Could not Detect i18n Locale Strings In Lessons Menu");
 											}
 										}
 										else
 										{
-											log.fatal("Could not detect Uncompleted Icon beside Poor Data Validation Lesson: " + lessonsMenu);
+											log.fatal("Could not detect Uncompleted Icon beside Poor Data Validation Lesson ");
 											fail("Uncompleted Module did not have Uncopmleted Symbol");
 										}
 									}
 									else
 									{
 										log.fatal("Could not detect completed Icon beside Insecure Direct Object Reference Lesson");
-										log.error("Could not find : <img src='css/images/completed.png'/><a class='lesson' id='"+inscureDirectObjectLesson + " in " + lessonsMenu);
+										log.error("Could not find : <img src='css/images/completed.png'/>");
 										fail("Completed Module Did not Have Completed Symbol");
 									}
 								}
 								else
 								{
-									log.fatal("Could not find Insecure Direct Object References ModuleID in: " + lessonsMenu);
+									log.fatal("Could not find Insecure Direct Object References ModuleID");
 									fail("Could not find Insecure Direct Object References ModuleID in Response");
 								}
 							}
 							else
 							{
-								log.fatal("Could not find lesson list items in repsonse" + lessonsMenu);
+								log.fatal("Could not find lesson list items in repsonse");
 								fail("Could not find Lesson List Items in Response");
 							}
 						}
@@ -1962,7 +1962,7 @@ public class GetterTest
 						}
 						else
 						{
-							log.fatal("Could not find i18n English String in lessons Menu: " + lessonsMenu);
+							log.fatal("Could not find i18n English String in lessons Menu: ");
 							fail("Could not Detect i18n Locale Strings In Lessons Menu");
 						}
 					}
@@ -2163,7 +2163,7 @@ public class GetterTest
 		String methodReturnResult = Getter.getModuleResult(applicationRoot, insecureCryptoLesson);
 		if(knownStoredResult.compareTo(methodReturnResult) != 0)
 		{
-			log.fatal("Known Result (" + knownStoredResult + ") did not match returned result (" + methodReturnResult + ")");
+			log.fatal("Known Result did not match returned result");
 			fail("Stored and Known Results Differed");
 		}
 	}
@@ -2179,7 +2179,7 @@ public class GetterTest
 		String methodReturnResult = Getter.getModuleResultFromHash(applicationRoot, insecureCryptoLessonHash);
 		if(knownStoredResult.compareTo(methodReturnResult) != 0)
 		{
-			log.fatal("Known Result (" + knownStoredResult + ") did not match returned result (" + methodReturnResult + ")");
+			log.fatal("Known Result did not match returned result");
 			fail("Stored and Known Results Differed");
 		}
 	}
@@ -2194,12 +2194,12 @@ public class GetterTest
 		String modules = Getter.getModulesInOptionTags(applicationRoot);
 		if(modules.indexOf(insecureCryptoLesson) == -1)
 		{
-			log.fatal("Insecure Crypto Lesson ID Ommited from list: " + modules);
+			log.fatal("Insecure Crypto Lesson ID Ommited from list");
 			fail("Entire List of Modules not returned");
 		}
 		else if(modules.indexOf("option") == -1)
 		{
-			log.fatal("No Options Tags Detected in List: " + modules);
+			log.fatal("No Options Tags Detected in List");
 			fail("No Options Tags Detected in List");
 		}
 	}
@@ -2211,17 +2211,17 @@ public class GetterTest
 		String modules = Getter.getModulesInOptionTagsCTF(applicationRoot);
 		if(modules.indexOf(lowestRankLevel) == -1)
 		{
-			log.fatal("Insecure Crypto Lesson ID Ommited from list: " + modules);
+			log.fatal("Insecure Crypto Lesson ID Ommited from list");
 			fail("Entire List of Modules not returned");
 		}
 		else if(modules.indexOf("option") == -1)
 		{
-			log.fatal("No Options Tags Detected in List: " + modules);
+			log.fatal("No Options Tags Detected in List");
 			fail("No Options Tags Detected in List");
 		}
 		else if(!modules.startsWith("<option value='" + lowestRankLevel))
 		{
-			log.fatal("Wrong Module Listed First. Should be module with lowest incremental Rank: " + modules);
+			log.fatal("Wrong Module Listed First. Should be module with lowest incremental Rank");
 			fail("First option tag was not the lowest ranking level");
 		}
 	}
@@ -2255,22 +2255,22 @@ public class GetterTest
 			String moduleStatusMenu = Getter.getModuleStatusMenu(applicationRoot);
 			if(moduleStatusMenu.indexOf("<tr><th>To Open</th><th>To Close</th></tr><tr>") == -1)
 			{
-				log.fatal("No Menu Header in ModuleStatusMenu: " + moduleStatusMenu);
+				log.fatal("No Menu Header in ModuleStatusMenu");
 				fail("No Menu Header in moduleStatusMenu");
 			}
 			else if(moduleStatusMenu.indexOf("id='toOpen'") == -1)
 			{
-				log.fatal("No Open Menu Detected in Output: " + moduleStatusMenu);
+				log.fatal("No Open Menu Detected in Output: ");
 				fail("No Open Meny Detected in Output");
 			}
 			else if(moduleStatusMenu.indexOf("id='toClose'") == -1)
 			{
-				log.fatal("No Close Menu Detected in Output: " + moduleStatusMenu);
+				log.fatal("No Close Menu Detected in Output");
 				fail("No Close Meny Detected in Output");
 			}
 			else if(moduleStatusMenu.indexOf("id='toOpen'></select></td>") < 0) //Should be empty as all modules should be open
 			{
-				log.fatal("Modules are in the 'toOpen' list when all modules should already be open: " + moduleStatusMenu);
+				log.fatal("Modules are in the 'toOpen' list when all modules should already be open");
 				fail("Modules are in the 'toOpen' list when all modules should already be open");
 			}
 			else
@@ -2314,22 +2314,22 @@ public class GetterTest
 			String moduleStatusMenu = Getter.getModuleStatusMenu(applicationRoot);
 			if(moduleStatusMenu.indexOf("<tr><th>To Open</th><th>To Close</th></tr><tr>") == -1)
 			{
-				log.fatal("No Menu Header in ModuleStatusMenu: " + moduleStatusMenu);
+				log.fatal("No Menu Header in ModuleStatusMenu");
 				fail("No Menu Header in moduleStatusMenu");
 			}
 			else if(moduleStatusMenu.indexOf("id='toOpen'") == -1)
 			{
-				log.fatal("No Open Menu Detected in Output: " + moduleStatusMenu);
+				log.fatal("No Open Menu Detected in Output");
 				fail("No Open Meny Detected in Output");
 			}
 			else if(moduleStatusMenu.indexOf("id='toClose'") == -1)
 			{
-				log.fatal("No Close Menu Detected in Output: " + moduleStatusMenu);
+				log.fatal("No Close Menu Detected in Output");
 				fail("No Close Meny Detected in Output");
 			}
 			else if(moduleStatusMenu.indexOf("id='toClose'></select></td>") < 0) //Should be empty as all modules should be closed
 			{
-				log.fatal("Modules are in the 'toClose' list when all modules should already be closed: " + moduleStatusMenu);
+				log.fatal("Modules are in the 'toClose' list when all modules should already be closed");
 				fail("Modules are in the 'toClose' list when all modules should already be closed");
 			}
 			else
@@ -2373,27 +2373,27 @@ public class GetterTest
 			String moduleStatusMenu = Getter.getModuleStatusMenu(applicationRoot);
 			if(moduleStatusMenu.indexOf("<tr><th>To Open</th><th>To Close</th></tr><tr>") == -1)
 			{
-				log.fatal("No Menu Header in ModuleStatusMenu: " + moduleStatusMenu);
+				log.fatal("No Menu Header in ModuleStatusMenu");
 				fail("No Menu Header in moduleStatusMenu");
 			}
 			else if(moduleStatusMenu.indexOf("id='toOpen'") == -1)
 			{
-				log.fatal("No Open Menu Detected in Output: " + moduleStatusMenu);
+				log.fatal("No Open Menu Detected in Output");
 				fail("No Open Meny Detected in Output");
 			}
 			else if(moduleStatusMenu.indexOf("id='toClose'") == -1)
 			{
-				log.fatal("No Close Menu Detected in Output: " + moduleStatusMenu);
+				log.fatal("No Close Menu Detected in Output");
 				fail("No Close Meny Detected in Output");
 			}
 			else if(moduleStatusMenu.indexOf("id='toClose'></select></td>") > 0) //Should not be empty as Web Levels should be closed
 			{
-				log.fatal("Modules are in the 'toClose' list when web modules should already be closed: " + moduleStatusMenu);
+				log.fatal("Modules are in the 'toClose' list when web modules should already be closed");
 				fail("Modules are in the 'toClose' list when web modules should already be closed");
 			}
 			else if(moduleStatusMenu.indexOf("id='toOpen'></select></td>") > 0) //Should not be empty as Mobile Levels should be open
 			{
-				log.fatal("Modules are in the 'toOpen' list when mobile modules should already be closed: " + moduleStatusMenu);
+				log.fatal("Modules are in the 'toOpen' list when mobile modules should already be closed");
 				fail("Modules are in the 'toOpen' list when mobile modules should already be closed");
 			}
 			else
@@ -2517,7 +2517,7 @@ public class GetterTest
 					i++; //Count the players returned
 					if(!playersByClass.getString(2).startsWith(userName))
 					{
-						log.fatal("Found Unexpected User: " + playersByClass.getString(2));
+						log.fatal("Found Unexpected User");
 						fail("Incorrect User from Different Class Returned");
 					}
 				}

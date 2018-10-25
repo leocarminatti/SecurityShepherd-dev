@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -74,6 +75,10 @@ public class SqlInjection6 extends HttpServlet
 			String htmlOutput = new String();
 			String applicationRoot = getServletContext().getRealPath("");
 			
+			Connection conn = null;
+			PreparedStatement prepstmt = null;
+			ResultSet users = null;
+			
 			try
 			{
 				String userPin = (String) request.getParameter("pinNumber");
@@ -82,15 +87,10 @@ public class SqlInjection6 extends HttpServlet
 				log.debug("userPin scrubbed - " + userPin);
 				userPin = java.net.URLDecoder.decode(userPin.replaceAll("\\\\\\\\x", "%"), "UTF-8"); //Decode \x encoding 
 				log.debug("searchTerm decoded to - " + userPin);
-				Connection conn = Database.getChallengeConnection(applicationRoot, "SqlChallengeSix");
+				conn = Database.getChallengeConnection(applicationRoot, "SqlChallengeSix");
 				log.debug("Looking for users");
-				//#Hackathon DK - SQL Injection
-				//PreparedStatement prepstmt = 
-				//		conn.prepareStatement("SELECT userName FROM users WHERE userPin = '" + userPin + "'");
-				PreparedStatement prepstmt = 
-						conn.prepareStatement("SELECT userName FROM users WHERE userPin =?");
-				stmt.setString(1, userPin);
-				ResultSet users = prepstmt.executeQuery();
+				prepstmt = conn.prepareStatement("SELECT userName FROM users WHERE userPin = '" + userPin + "'");
+				users = prepstmt.executeQuery();
 				try
 				{
 					if(users.next())
@@ -116,7 +116,6 @@ public class SqlInjection6 extends HttpServlet
 						log.error("Failed to Pause: " + e1.toString());
 					}
 				}
-				conn.close();
 			}
 			catch(Exception e)
 			{
@@ -129,6 +128,26 @@ public class SqlInjection6 extends HttpServlet
 				catch(Exception e2)
 				{
 					log.error("Failed to Pause: " + e2.toString());
+				}
+			}
+			finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
+				try {
+					prepstmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
+				try {
+					users.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
 				}
 			}
 			log.debug("*** SQLi C6 End ***");
