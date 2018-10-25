@@ -15,9 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.owasp.encoder.Encode;
-
-
 import utils.Hash;
 import utils.ShepherdLogManager;
 import utils.Validate;
