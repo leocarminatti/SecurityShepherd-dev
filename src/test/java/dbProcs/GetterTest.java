@@ -1622,18 +1622,20 @@ public class GetterTest
 						log.debug("Parsed Scoreboard Data");
 						if(scoreboardJson == null)
 							log.debug("scoreboardJson is Null. json was: " + scoreboardData);
+						else {
 						//Loop through array to find Our user
-						for(int i = 0; i < scoreboardJson.size(); i++)
-						{
-							log.debug("Looping through Array " + i);
-							JSONObject scoreRowJson = (JSONObject)scoreboardJson.get(i);
-							if(scoreRowJson.get("username").toString().compareTo(userName) == 0)
+							for(int i = 0; i < scoreboardJson.size(); i++)
 							{
-								fail("Found " + userName + " in scoreboard"); 
-							}
-							if(scoreRowJson.get("username").toString().compareTo(otherUserName) == 0)
-							{
-								fail("Found " + otherUserName + " in scoreboard"); 
+								log.debug("Looping through Array " + i);
+								JSONObject scoreRowJson = (JSONObject)scoreboardJson.get(i);
+								if(scoreRowJson.get("username").toString().compareTo(userName) == 0)
+								{
+									fail("Found " + userName + " in scoreboard"); 
+								}
+								if(scoreRowJson.get("username").toString().compareTo(otherUserName) == 0)
+								{
+									fail("Found " + otherUserName + " in scoreboard"); 
+								}
 							}
 						}
 						log.debug("PASS: Did not ether user's in the response, therefore they were not included");

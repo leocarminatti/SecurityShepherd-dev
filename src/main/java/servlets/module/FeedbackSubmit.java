@@ -86,11 +86,14 @@ public class FeedbackSubmit extends HttpServlet
 					
 					log.debug("Getting Parameters");
 					String moduleId = (String)request.getParameter("moduleId");;
-					log.debug("moduleId = " + moduleId.toString());
-					
+					if(moduleId != null) {
+						log.debug("moduleId = " + moduleId.toString());
+					}
 					
 					String solutionKey = Parser.unescapeEntities((String)request.getParameter("solutionKey"), false);
-					log.debug("solutionKey = " + solutionKey.toString());
+					if(solutionKey != null) {
+						log.debug("solutionKey = " + solutionKey.toString());
+					}
 					int before = Integer.parseInt(Validate.validateParameter(request.getParameter("before"), 1));
 					log.debug("before = " + before);
 					int after = Integer.parseInt(Validate.validateParameter(request.getParameter("after"), 1));

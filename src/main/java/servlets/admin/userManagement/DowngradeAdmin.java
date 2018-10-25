@@ -73,8 +73,9 @@ public class DowngradeAdmin extends HttpServlet
 					
 					log.debug("Getting Parameters");
 					String admin = (String)request.getParameter("admin");;
-					log.debug("admin = " + admin.toString());
-					
+					if(admin != null) {
+						log.debug("admin = " + admin.toString());
+					}
 					
 					
 					//Validation

@@ -56,7 +56,7 @@ public class Setup extends HttpServlet {
 			String dbAuth = request.getParameter("dbauth");
 			String dbOverride = request.getParameter("dboverride");
 
-			String auth = new String(Files.readAllBytes(Paths.get(Constants.SETUP_AUTH)));
+			String auth = new String(Files.readAllBytes(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize()));
 
 			StringBuffer dbProp = new StringBuffer();
 			dbProp.append("databaseConnectionURL=jdbc:mysql://" + dbHost + ":" + dbPort + "/");
@@ -73,7 +73,7 @@ public class Setup extends HttpServlet {
 			if (!auth.equals(dbAuth)) {
 				htmlOutput = bundle.getString("generic.text.setup.authentication.failed");
 			} else {
-				Files.write(Paths.get(Constants.DBPROP), dbProp.toString().getBytes(), StandardOpenOption.CREATE);	
+				Files.write(Paths.get(FilenameUtils.normalize(Constants.DBPROP)).normalize(), dbProp.toString().getBytes(), StandardOpenOption.CREATE);	
 				if (conn == null) {
 					htmlOutput = bundle.getString("generic.text.setup.connection.failed");
 				} else {
@@ -91,7 +91,7 @@ public class Setup extends HttpServlet {
 						success = true;
 					} catch (InstallationException e) {
 						htmlOutput = bundle.getString("generic.text.setup.failed") + ": " +  e.getMessage();
-						FileUtils.deleteQuietly(new File(Constants.DBPROP));
+						FileUtils.deleteQuietly(new File(FilenameUtils.normalize(Constants.DBPROP)));
 					}
 					//Clean up File as it is not needed anymore. Will Cause a new one to be generated next time too
 					removeAuthFile();
@@ -133,7 +133,7 @@ public class Setup extends HttpServlet {
 
 	private static void generateAuth() {
 		try {
-			if (!Files.exists(Paths.get(Constants.SETUP_AUTH), LinkOption.NOFOLLOW_LINKS)) {
+			if (!Files.exists(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize(), LinkOption.NOFOLLOW_LINKS)) {
 				UUID randomUUID = UUID.randomUUID();
 				Files.write(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize(), randomUUID.toString().getBytes(), StandardOpenOption.CREATE);
 				log.info(UUID_GENERATED);
@@ -148,7 +148,7 @@ public class Setup extends HttpServlet {
 		if (!Files.exists(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize(), LinkOption.NOFOLLOW_LINKS)) {
 			log.info(SETUP_FILE_NOT_FOUND);
 		} else {
-			FileUtils.deleteQuietly(new File(Constants.SETUP_AUTH));
+			FileUtils.deleteQuietly(new File(FilenameUtils.normalize(Constants.SETUP_AUTH)));
 		}
 	}
 
