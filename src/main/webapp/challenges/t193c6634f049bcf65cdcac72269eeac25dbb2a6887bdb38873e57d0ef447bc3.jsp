@@ -68,7 +68,7 @@ String i18nLevelName = bundle.getString("challenge.challengeName");
 			<p> 
 				<%= bundle.getString("challenge.description") %>
 				<br />
-				<form id="leForm" action="javascript:;">
+				<form id="leForm" action="javascript:;" method="post">
 					<div id="resultsDiv">
 						<table>
 							<tr><td>
@@ -91,7 +91,7 @@ String i18nLevelName = bundle.getString("challenge.challengeName");
 				<p style="display: none;" id="loadingSign"><%= bundle.getString("challenge.form.loading") %></p>
 				<br/>
 				<div id="userControl" style="display: none;">
-					<form id="leForm2" action="javascript:;">
+					<form id="leForm2" action="javascript:;" method="post">
 						<h2 class='title'><%= bundle.getString("reset.header") %></h2>
 						<p><%= bundle.getString("reset.whatToDo") %></p>
 						<table>
