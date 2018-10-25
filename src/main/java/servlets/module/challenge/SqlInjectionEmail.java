@@ -74,11 +74,9 @@ public class SqlInjectionEmail extends HttpServlet
 			PrintWriter out = response.getWriter();  
 			out.print(getServletInfo());
 			String htmlOutput = new String();
-			
-			Connection conn = null;
-			Statement stmt = null;
-			ResultSet resultSet = null;
-			
+			String ApplicationRoot = getServletContext().getRealPath("");
+			Connection conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeEmail");
+
 			try
 			{
 				String userIdentity = request.getParameter("userIdentity");
@@ -86,14 +84,14 @@ public class SqlInjectionEmail extends HttpServlet
 				if(Validate.isValidEmailAddress(userIdentity))
 				{
 					log.debug("Filtered to " + userIdentity);
-					String ApplicationRoot = getServletContext().getRealPath("");
+
 					log.debug("Servlet root = " + ApplicationRoot );
 					
 					log.debug("Getting Connection to Database");
-					conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeEmail");
-					stmt = conn.createStatement();
+					
+					Statement stmt = conn.createStatement();
 					log.debug("Gathering result set");
-					resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerAddress = '" + userIdentity + "'");
+					ResultSet resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerAddress = '" + userIdentity + "'");
 					
 					int i = 0;
 					htmlOutput = "<h2 class='title'>" + bundle.getString("response.searchResults")+ "</h2>";
@@ -133,24 +131,7 @@ public class SqlInjectionEmail extends HttpServlet
 				log.fatal(levelName + " - " + e.toString());
 			}
 			finally {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
-				try {
-					resultSet.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
+				Database.closeConnection(conn);
 			}
 			log.debug("Outputting HTML");
 			out.write(htmlOutput);

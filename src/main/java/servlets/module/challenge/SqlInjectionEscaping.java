@@ -72,9 +72,8 @@ public class SqlInjectionEscaping extends HttpServlet
 			PrintWriter out = response.getWriter();  
 			out.print(getServletInfo());
 			String htmlOutput = new String();
-			Connection conn = null;
-			Statement stmt = null;
-			ResultSet resultSet = null;
+			String ApplicationRoot = getServletContext().getRealPath("");
+			Connection conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeEscape");
 			
 			try
 			{
@@ -82,13 +81,12 @@ public class SqlInjectionEscaping extends HttpServlet
 				log.debug("User Submitted - " + aUserId);
 				aUserId = aUserId.replaceAll("'", "\\\\'"); //Replace ' with \'
 				log.debug("Escaped to - " + aUserId);
-				String ApplicationRoot = getServletContext().getRealPath("");
 				
 				log.debug("Getting Connection to Database");
-				conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeEscape");
-				stmt = conn.createStatement();
+				
+				Statement stmt = conn.createStatement();
 				log.debug("Gathering result set");
-				resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerId = '" + aUserId + "'");
+				ResultSet resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerId = '" + aUserId + "'");
 				
 				int i = 0;
 				htmlOutput = "<h2 class='title'>" + bundle.getString("response.searchResults")+ "</h2>";
@@ -122,24 +120,7 @@ public class SqlInjectionEscaping extends HttpServlet
 				log.fatal(levelName + " - " + e.toString());
 			}
 			finally {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
-				try {
-					resultSet.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
+				Database.closeConnection(conn);
 			}
 			log.debug("Outputting HTML");
 			out.write(htmlOutput);

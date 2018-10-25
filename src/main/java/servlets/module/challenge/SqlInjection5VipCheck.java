@@ -70,9 +70,7 @@ public class SqlInjection5VipCheck extends HttpServlet
 			String htmlOutput = new String();
 			String applicationRoot = getServletContext().getRealPath("");
 			
-			Connection conn = null;
-			PreparedStatement prepstmt = null;
-			ResultSet coupons = null;
+			Connection conn = Database.getChallengeConnection(applicationRoot, "SqlInjectionChallenge5ShopVipCoupon");
 			
 			try
 			{
@@ -82,10 +80,9 @@ public class SqlInjection5VipCheck extends HttpServlet
 					couponCode = new String();
 				
 				htmlOutput = new String("");
-				conn = Database.getChallengeConnection(applicationRoot, "SqlInjectionChallenge5ShopVipCoupon");
 				log.debug("Looking for VipCoupons Insecurely");
-				prepstmt = conn.prepareStatement("SELECT itemId, perCentOff, itemName FROM vipCoupons JOIN items USING (itemId) WHERE couponCode = '" + couponCode + "';");
-				coupons = prepstmt.executeQuery();
+				PreparedStatement prepstmt = conn.prepareStatement("SELECT itemId, perCentOff, itemName FROM vipCoupons JOIN items USING (itemId) WHERE couponCode = '" + couponCode + "';");
+				ResultSet coupons = prepstmt.executeQuery();
 				try
 				{
 					if(coupons.next())
@@ -112,24 +109,7 @@ public class SqlInjection5VipCheck extends HttpServlet
 				htmlOutput += "<p> " + bundle.getString("response.checkFailed")+ "</p>";
 			}
 			finally {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
-				try {
-					prepstmt.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
-				try {
-					coupons.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
+				Database.closeConnection(conn);
 			}
 			try
 			{

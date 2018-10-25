@@ -151,14 +151,13 @@ public class Setup extends HttpServlet {
 
 	private synchronized void executeSqlScript() throws InstallationException {
 
-		Connection databaseConnection = null;
+		Connection databaseConnection = Database.getDatabaseConnection(null, true);;
 		Statement psProcToexecute = null;
 		
 		try {
 			File file = new File(getClass().getClassLoader().getResource("/database/coreSchema.sql").getFile());
 			String data = FileUtils.readFileToString(file, Charset.defaultCharset() );
 			
-			databaseConnection = Database.getDatabaseConnection(null, true);
 			psProcToexecute = databaseConnection.createStatement();
 			psProcToexecute.executeUpdate(data);
 			
@@ -173,31 +172,19 @@ public class Setup extends HttpServlet {
 			throw new InstallationException(e);
 		}
 		finally {
-			try {
-				databaseConnection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				psProcToexecute.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				Database.closeConnection(databaseConnection);
 		}
 	}
 
 	private synchronized void executeUpdateScript() throws InstallationException {
 
-		Connection databaseConnection = null;
+		Connection databaseConnection =  Database.getDatabaseConnection(null, true);
 		Statement psProcToexecute = null;
 		
 		try {
 			File file = new File(getClass().getClassLoader().getResource("/database/updatev3_0tov3_1.sql").getFile());
 			String data = FileUtils.readFileToString(file, Charset.defaultCharset() );
 
-			databaseConnection = Database.getDatabaseConnection(null, true);
 			psProcToexecute = databaseConnection.createStatement();
 			psProcToexecute.executeUpdate(data);
 
@@ -207,18 +194,7 @@ public class Setup extends HttpServlet {
 			throw new InstallationException(e);
 		}
 		finally {
-			try {
-				databaseConnection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
-				psProcToexecute.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			Database.closeConnection(databaseConnection);
 		}
 	}
 }

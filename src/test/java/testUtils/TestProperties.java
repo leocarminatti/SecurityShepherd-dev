@@ -24,16 +24,14 @@ public class TestProperties
 {
 	public static void executeSql(org.apache.log4j.Logger log) throws InstallationException
 	{
-		Connection databaseConnection = null;
-		Statement psProcToexecute = null;
+		Connection databaseConnection = Database.getDatabaseConnection(null, true);
 		
 		try 
 		{
 			File file = new File(System.getProperty("user.dir")+"/src/main/resources/database/coreSchema.sql");
 			String data = FileUtils.readFileToString(file, Charset.defaultCharset() );
 			
-			databaseConnection = Database.getDatabaseConnection(null, true);
-			psProcToexecute = databaseConnection.createStatement();
+			Statement psProcToexecute = databaseConnection.createStatement();
 			psProcToexecute.executeUpdate(data);
 			
 			file = new File(System.getProperty("user.dir")+"/src/main/resources/database/moduleSchemas.sql");
@@ -47,18 +45,7 @@ public class TestProperties
 			throw new InstallationException(e);
 		}
 		finally {
-			try {
-				databaseConnection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				/*ignored*/
-			}
-			try {
-				psProcToexecute.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				/*ignored*/
-			}
+			Database.closeConnection(databaseConnection);
 		}
 	}
 	

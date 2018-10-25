@@ -72,10 +72,8 @@ public class UrlAccess3UserList extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			out.print(getServletInfo());
 			String htmlOutput = new String();
-
-			Connection conn = null;
-			PreparedStatement callstmt = null;
-			ResultSet rs = null;
+			String ApplicationRoot = getServletContext().getRealPath("");
+			Connection	conn = Database.getChallengeConnection(ApplicationRoot, "UrlAccessThree");
 
 			try {
 				Cookie userCookies[] = request.getCookies();
@@ -87,8 +85,7 @@ public class UrlAccess3UserList extends HttpServlet {
 						break; // End Loop, because we found the token
 					}
 				}
-				String ApplicationRoot = getServletContext().getRealPath("");
-				conn = Database.getChallengeConnection(ApplicationRoot, "UrlAccessThree");
+
 				String currentUser = new String("aGuest");
 				if (theCookie != null) {
 					log.debug("Cookie value: " + theCookie.getValue());
@@ -98,11 +95,11 @@ public class UrlAccess3UserList extends HttpServlet {
 					currentUser = decodedCookie;
 				}
 
-				callstmt = conn.prepareStatement(
+				PreparedStatement callstmt = conn.prepareStatement(
 						"SELECT userName FROM users WHERE userRole = \"admin\" OR userName = \"" + currentUser + "\";");
 				log.debug("Getting User List");
 				htmlOutput = new String();
-				rs = callstmt.executeQuery();
+				ResultSet rs = callstmt.executeQuery();
 				while (rs.next()) {
 					htmlOutput += Encode.forHtml(rs.getString(1)) + "<br>";
 					if (rs.getString(1).equalsIgnoreCase("MrJohnReillyTheSecond")) {
@@ -113,24 +110,7 @@ public class UrlAccess3UserList extends HttpServlet {
 				htmlOutput = new String(errors.getString("error.funky"));
 				log.fatal(levelName + " - " + e.toString());
 			} finally {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
-				try {
-					callstmt.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
+				Database.closeConnection(conn);
 			}
 			log.debug("Outputting HTML");
 			out.write(htmlOutput);

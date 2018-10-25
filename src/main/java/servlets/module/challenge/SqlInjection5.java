@@ -159,24 +159,7 @@ public class SqlInjection5 extends HttpServlet
 				htmlOutput += "<p>" + bundle.getString("response.orderFailed")+ "</p>";
 			}
 			finally {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
-				try {
-					prepstmt.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
-				try {
-					coupons.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
+				Database.closeConnection(conn);
 			}
 			try
 			{

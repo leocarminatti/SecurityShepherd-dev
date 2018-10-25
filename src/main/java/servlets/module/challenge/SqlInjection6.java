@@ -75,9 +75,7 @@ public class SqlInjection6 extends HttpServlet
 			String htmlOutput = new String();
 			String applicationRoot = getServletContext().getRealPath("");
 			
-			Connection conn = null;
-			PreparedStatement prepstmt = null;
-			ResultSet users = null;
+			Connection conn = Database.getChallengeConnection(applicationRoot, "SqlChallengeSix");
 			
 			try
 			{
@@ -87,10 +85,10 @@ public class SqlInjection6 extends HttpServlet
 				log.debug("userPin scrubbed - " + userPin);
 				userPin = java.net.URLDecoder.decode(userPin.replaceAll("\\\\\\\\x", "%"), "UTF-8"); //Decode \x encoding 
 				log.debug("searchTerm decoded to - " + userPin);
-				conn = Database.getChallengeConnection(applicationRoot, "SqlChallengeSix");
+				
 				log.debug("Looking for users");
-				prepstmt = conn.prepareStatement("SELECT userName FROM users WHERE userPin = '" + userPin + "'");
-				users = prepstmt.executeQuery();
+				PreparedStatement prepstmt = conn.prepareStatement("SELECT userName FROM users WHERE userPin = '" + userPin + "'");
+				ResultSet users = prepstmt.executeQuery();
 				try
 				{
 					if(users.next())
@@ -131,24 +129,7 @@ public class SqlInjection6 extends HttpServlet
 				}
 			}
 			finally {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
-				try {
-					prepstmt.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
-				try {
-					users.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					/*ignored*/
-				}
+				Database.closeConnection(conn);
 			}
 			log.debug("*** SQLi C6 End ***");
 			out.write(htmlOutput);

@@ -938,18 +938,14 @@ public class SetterTest
 		String currentRole = new String();
 		String newRole = new String();
 		Connection conn = Database.getCoreConnection(applicationRoot);
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		PreparedStatement ps2 = null;
-		ResultSet rs2 = null;
 		
 		try
 		{
 			if(GetterTest.verifyTestUser(applicationRoot, userName, userName))
 			{
-				ps = conn.prepareStatement("SELECT userRole FROM users WHERE userName = ?");
+				PreparedStatement ps = conn.prepareStatement("SELECT userRole FROM users WHERE userName = ?");
 				ps.setString(1, userName);
-				rs = ps.executeQuery();
+				ResultSet rs = ps.executeQuery();
 				if(rs.next())
 				{
 					currentRole = rs.getString(1);
@@ -977,9 +973,9 @@ public class SetterTest
 				{
 					log.debug("Checking if change occurred");
 					//conn2 = Database.getCoreConnection(applicationRoot);
-					ps2 = conn.prepareStatement("SELECT userRole FROM users WHERE userName = ?");
-					ps.setString(1, userName);
-					rs2 = ps.executeQuery();
+					PreparedStatement ps2 = conn.prepareStatement("SELECT userRole FROM users WHERE userName = ?");
+					ps2.setString(1, userName);
+					ResultSet rs2 = ps.executeQuery();
 					if(rs.next())
 					{
 						if(!newRole.equalsIgnoreCase(rs.getString(1)))
@@ -1014,30 +1010,6 @@ public class SetterTest
 			fail("Could not Complete testUpdateUserRole");
 		}
 		finally {
-			try {
-				ps.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				/*ignored*/
-			}
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				/*ignored*/
-			}
-			try {
-				ps2.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				/*ignored*/
-			}
-			try {
-				rs2.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				/*ignored*/
-			}
 			Database.closeConnection(conn);
 		}
 	}
