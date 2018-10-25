@@ -63,7 +63,7 @@ String ApplicationRoot = getServletContext().getRealPath("");
 		<table align="center">
 			<tr><td><p>Database URL:</p></td><td><input type="text" id="databaseURL" value=""/></td></tr>
 			<tr><td><p>Username:</p></td><td><input type="text" id="databaseUsername" /></td></tr>
-			<tr><td><p>Password:</p></td><td><input type="password" id="databasePassword" /></td></tr>
+			<tr><td><p>Password:</p></td><td><input type="password" id="databasePassword" autocomplete="off" /></td></tr>
 			<tr><td colspan="2" align="center">
 				<input type="submit" id="submitButton" value="Set Core Database Data"/>
 			</td></tr>

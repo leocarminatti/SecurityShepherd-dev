@@ -33,7 +33,7 @@ public class Validate
 {
 	private static org.apache.log4j.Logger log = Logger.getLogger(Validate.class);
 	private static final String USER_ACCESS_VIOLATION = "User Attempting Admin functions! (CSRF Tokens Not Checked)";
-	privtae static final String USER_ACESS_VIOLATION_BAD_CSRF= "User account  accessing admin function with bad CSRF Tokens";
+	private static final String USER_ACESS_VIOLATION_BAD_CSRF= "User account  accessing admin function with bad CSRF Tokens";
 	private static final String PARAMETERS_VIOLATION = "Tampered Parameter Detected!!! Could not parameters";
 	private static final String ROLE_PARAMETER = "User Role Parameter Tampered.";
 	

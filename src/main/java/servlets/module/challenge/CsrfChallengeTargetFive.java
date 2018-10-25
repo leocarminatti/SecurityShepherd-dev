@@ -2,6 +2,7 @@ package servlets.module.challenge;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.Locale;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -82,8 +83,10 @@ public class CsrfChallengeTargetFive extends HttpServlet
 				if(ses.getAttribute("csrfChallengeFiveNonce") == null || ses.getAttribute("csrfChallengeFiveNonce").toString().isEmpty())
 				{
 					log.debug("No CSRF Token associated with user");
-					Random random = new Random();
-					int newToken = random.nextInt(3);
+				    Random ranGen = new Random();
+				    Date date = new Date(0);
+				    ranGen.setSeed(date.getTime());
+					int newToken = ranGen.nextInt(3);
 					out.write(csrfGenerics.getString("target.noTokenNewToken") + " " + newToken + "<br><br>");
 					storedToken = "" + newToken;
 					ses.setAttribute("csrfChallengeFiveNonce", newToken);

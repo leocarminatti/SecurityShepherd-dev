@@ -72,6 +72,9 @@ public class SqlInjectionEscaping extends HttpServlet
 			PrintWriter out = response.getWriter();  
 			out.print(getServletInfo());
 			String htmlOutput = new String();
+			Connection conn = null;
+			Statement stmt = null;
+			ResultSet resultSet = null;
 			
 			try
 			{
@@ -82,15 +85,10 @@ public class SqlInjectionEscaping extends HttpServlet
 				String ApplicationRoot = getServletContext().getRealPath("");
 				
 				log.debug("Getting Connection to Database");
-				Connection conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeEscape");
-				Statement stmt = conn.createStatement();
+				conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeEscape");
+				stmt = conn.createStatement();
 				log.debug("Gathering result set");
-				//#Hackathon DK - SQL Injection
-				//ResultSet resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerId = '" + aUserId + "'");
-				String query = "SELECT * FROM customers WHERE customerId = ?";
-				PreparedStatement stmt = conn.prepareStatement(query);
-				stmt.setString(1, aUserId);					
-				ResultSet resultSet = stmt.execute();
+				resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerId = '" + aUserId + "'");
 				
 				int i = 0;
 				htmlOutput = "<h2 class='title'>" + bundle.getString("response.searchResults")+ "</h2>";
@@ -122,6 +120,26 @@ public class SqlInjectionEscaping extends HttpServlet
 			{
 				out.write(errors.getString("error.funky"));
 				log.fatal(levelName + " - " + e.toString());
+			}
+			finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
 			}
 			log.debug("Outputting HTML");
 			out.write(htmlOutput);

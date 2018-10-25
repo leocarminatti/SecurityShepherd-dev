@@ -3,7 +3,6 @@ package servlets.module.challenge;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -78,6 +77,10 @@ public class SqlInjection1 extends HttpServlet
 			
 			String htmlOutput = new String();
 			
+			Connection conn = null;
+			Statement stmt = null;
+			ResultSet resultSet = null;
+			
 			try
 			{
 				String aUserId = request.getParameter("aUserId");
@@ -86,16 +89,10 @@ public class SqlInjection1 extends HttpServlet
 				log.debug("Servlet root = " + ApplicationRoot );
 				
 				log.debug("Getting Connection to Database");
-				Connection conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeOne");
-				//Statement stmt = conn.createStatement();
+				conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeOne");
+				stmt = conn.createStatement();
 				log.debug("Gathering result set");
-				
-				//#Hackathon DK - SQL Injection
-				String query = "SELECT * FROM customers WHERE customerId =?";
-				PreparedStatement stmt = conn.prepareStatement(query);
-				stmt.setString(1, aUserId);			
-				ResultSet resultSet = stmt.executeQuery();				
-				//ResultSet resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerId = \"" + aUserId + "\"");
+				resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerId = \"" + aUserId + "\"");
 				
 				int i = 0;
 				htmlOutput = "<h2 class='title'>" + bundle.getString("response.searchResults")+ "</h2>";
@@ -127,6 +124,26 @@ public class SqlInjection1 extends HttpServlet
 			{
 				out.write(errors.getString("error.funky"));
 				log.fatal(levelName + " - " + e.toString());
+			}
+			finally {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					/*ignored*/
+				}
 			}
 			log.debug("Outputting HTML");
 			out.write(htmlOutput);

@@ -44,7 +44,7 @@ public class FeedbackSubmit extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	private static org.apache.log4j.Logger log = Logger.getLogger(SolutionSubmit.class);
-	private static final Strig USER_WARNED = " has been warned and potentially has lost points";
+	private static final String USER_WARNED = " has been warned and potentially has lost points";
 	private static final String INVOKE_BAD_PROCEDURE = "Invoking Bad Submission procedure...";
 	/**
 	 * Initiated by a dynamic form returned by servlets.module.SolutionSubmit.doPost() 
