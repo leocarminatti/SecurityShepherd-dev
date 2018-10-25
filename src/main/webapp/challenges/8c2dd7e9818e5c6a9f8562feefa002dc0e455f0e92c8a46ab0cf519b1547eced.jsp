@@ -70,7 +70,7 @@
 			<p> 
 				<%= bundle.getString("challenge.description") %>
 				
-				<form id="leForm" action="javascript:;">
+				<form id="leForm" action="javascript:;" method="post">
 					<table>
 					<tr><td colspan="2">
 						<%= bundle.getString("challenge.form.pleaseEnterCredentials") %>

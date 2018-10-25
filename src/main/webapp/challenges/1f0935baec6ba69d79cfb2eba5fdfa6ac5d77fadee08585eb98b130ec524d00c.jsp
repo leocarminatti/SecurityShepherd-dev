@@ -84,7 +84,7 @@ if (request.getSession() != null)
 					<h2 class="title"><%= bundle.getString("insecureBank.signInNow") %></h2>
 					<p><%= bundle.getString("insecureBank.signInNow.message") %></p>
 					<div id="loginFormDiv">
-						<form id="loginForm" action="javascript:;">
+						<form id="loginForm" action="javascript:;" method="post">
 							<table>
 								<tr><td><%= bundle.getString("loginForm.holder") %> </td><td><input type="text" id="loginAccountHolder" autocomplete="off"></td></tr>
 								<tr><td><%= bundle.getString("loginForm.password") %> </td><td><input type="password" id="loginAccountPassword" autocomplete="off"></td></tr>
@@ -99,7 +99,7 @@ if (request.getSession() != null)
 					<h2 class="title"><%= bundle.getString("register.makeAccount") %></h2>
 					<p><%= bundle.getString("register.makeAccount.message") %></p>
 					<div id="registrationFormDiv">
-						<form id="registrationForm" action="javascript:;">
+						<form id="registrationForm" action="javascript:;" method="post">
 							<table>
 								<tr><td><%= bundle.getString("loginForm.holder") %> </td><td><input type="text" id="registrationAccountHolder" autocomplete="off"></td></tr>
 								<tr><td><%= bundle.getString("loginForm.password") %> </td><td><input type="password" id="registrationAccountPassword" autocomplete="off"></td></tr>

@@ -68,7 +68,7 @@ String i18nLevelName = bundle.getString("challenge.challengeName");
 			<p> 
 				<%= bundle.getString("challenge.description") %>
 				<br />
-				<form id="leForm" action="javascript:;">
+				<form id="leForm" action="javascript:;" method="post">
 					<div id="resultsDiv">
 						<table>
 							<tr><td>
@@ -79,7 +79,7 @@ String i18nLevelName = bundle.getString("challenge.challengeName");
 							<tr><td>
 								<%= bundle.getString("challenge.form.password") %>
 							</td><td>
-								<input type="password" id="subUserPassword" autocomplete="off" />
+								<input type="password" id="subUserPassword"/>
 							</td></tr>
 							<tr><td colspan="2">
 								<div id="submitButton"><input type="submit" value="<%= bundle.getString("challenge.form.signIn") %>"/></div>
@@ -91,19 +91,19 @@ String i18nLevelName = bundle.getString("challenge.challengeName");
 				<p style="display: none;" id="loadingSign"><%= bundle.getString("challenge.form.loading") %></p>
 				<br/>
 				<div id="userControl" style="display: none;">
-					<form id="leForm2" action="javascript:;">
+					<form id="leForm2" action="javascript:;" method="post">
 						<h2 class='title'><%= bundle.getString("reset.header") %></h2>
 						<p><%= bundle.getString("reset.whatToDo") %></p>
 						<table>
 							<tr><td>
 								<%= bundle.getString("reset.form.new") %>
 							</td><td>
-								<input type="password" id="passOne" autocomplete="off" />
+								<input type="password" id="passOne"/>
 							</td></tr>
 							<tr><td>
 								<%= bundle.getString("reset.form.confirm") %>
 							</td><td>
-								<input type="password" id="passTwo" autocomplete="off" />
+								<input type="password" id="passTwo"/>
 							</td></tr>
 							<tr><td colspan="2">
 								<div id="resetSubmit"><input type="submit" value="<%= bundle.getString("reset.form.changePass") %>"/></div>
