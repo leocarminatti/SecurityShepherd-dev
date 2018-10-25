@@ -83,10 +83,11 @@ public class CsrfChallengeTargetFive extends HttpServlet
 				if(ses.getAttribute("csrfChallengeFiveNonce") == null || ses.getAttribute("csrfChallengeFiveNonce").toString().isEmpty())
 				{
 					log.debug("No CSRF Token associated with user");
-				    Random ranGen = new Random();
-				    Date date = new Date(0);
+				    
+				    SecureRandom ranGen = new SecureRandom();
+				    Date date = new Date();
 				    ranGen.setSeed(date.getTime());
-					int newToken = ranGen.nextInt(3);
+					int newToken = ranGen.nextInt();
 					out.write(csrfGenerics.getString("target.noTokenNewToken") + " " + newToken + "<br><br>");
 					storedToken = "" + newToken;
 					ses.setAttribute("csrfChallengeFiveNonce", newToken);
