@@ -89,7 +89,13 @@ public class SqlInjectionEmail extends HttpServlet
 					Connection conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeEmail");
 					Statement stmt = conn.createStatement();
 					log.debug("Gathering result set");
-					ResultSet resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerAddress = '" + userIdentity + "'");
+					
+					//#Hackathon DK - SQL Injection
+					//ResultSet resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerAddress = '" + userIdentity + "'");
+					String query = "SELECT * FROM customers WHERE customerAddress = ?";
+					PreparedStatement stmt = conn.prepareStatement(query);
+					stmt.setString(1, userIdentity);					
+					ResultSet resultSet = stmt.execute();					
 					
 					int i = 0;
 					htmlOutput = "<h2 class='title'>" + bundle.getString("response.searchResults")+ "</h2>";
