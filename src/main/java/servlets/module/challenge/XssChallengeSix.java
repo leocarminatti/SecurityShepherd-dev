@@ -20,6 +20,8 @@ import utils.Hash;
 import utils.ShepherdLogManager;
 import utils.Validate;
 import utils.XssFilter;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 /**
  * Cross Site Scripting Challenge Six control class.
  * <br/><br/>
@@ -46,6 +48,15 @@ public class XssChallengeSix extends HttpServlet
 	private static org.apache.log4j.Logger log = Logger.getLogger(XssChallengeSix.class);
 	private static final String levelHash = "d330dea1acf21886b685184ee222ea8e0a60589c3940afd6ebf433469e997caf";
 	private static final String levelName = "Cross-Site Scripting Challenge Six";
+	
+	// OWASP Sanitizer
+				PolicyFactory policy = new HtmlPolicyBuilder()
+						.allowElements("a", "img")
+						.allowUrlProtocols("https")
+						.allowAttributes("href", "src")
+						.onElements("a", "img")
+						.requireRelNofollowOnLinks()
+						.toFactory();
 	/**
 	 * Cross Site Request Forgery safe Reflected XSS vulnerability. cannot be remotely exploited, and there fore only is executable against the person initiating the function.
 	 * @param searchTerm To be spat back out at the user after been encoded for wrong HTML Context
@@ -100,7 +111,7 @@ public class XssChallengeSix extends HttpServlet
 						"<p>" + bundle.getString("response.linkPosted") + "</p> " +
 						userPost +
 						"</p>";
-					out.write(htmlOutput);
+					out.write(policy.sanitize(htmlOutput));
 				}
 			}
 		}
