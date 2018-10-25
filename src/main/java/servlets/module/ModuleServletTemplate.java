@@ -140,12 +140,12 @@ extends HttpServlet
 	{
 		
 		String result = new String();
+		Connection conn = Database.getChallengeConnection(applicationRoot, "nameOfPropertiesFile.properties");
 		try 
 		{
 			//You will need to make a schema in the database/moduleSchemas.sql file, and define a user which can access it.
 			//The details of this user need to be entered in a properties file in WEB-INF/challenges
 			//The Name of that user need to be entered in the following funciton;
-			Connection conn = Database.getChallengeConnection(applicationRoot, "nameOfPropertiesFile.properties");
 			
 			//#Hackathon DK - SQL Injection
 			String query = "SELECT * FROM tb_users WHERE username =?";
@@ -172,6 +172,9 @@ extends HttpServlet
 		catch (Exception e)
 		{
 			log.fatal(bundle.getString("example.error") + ": " + Encode.forHtml(e.toString())); //Html Encode Error to prevent XSS
+		}
+		finally {
+			Database.closeConnection(conn);
 		}
 		return result;
 	}

@@ -78,6 +78,8 @@ public class SessionManagement7 extends HttpServlet
 			
 			String htmlOutput = new String();
 			log.debug(levelName + " Servlet Accessed");
+			String ApplicationRoot = getServletContext().getRealPath("");
+			Connection conn = Database.getChallengeConnection(ApplicationRoot, "BrokenAuthAndSessMangChalFlowers");
 			try
 			{
 				log.debug("Getting Cookies");
@@ -113,8 +115,7 @@ public class SessionManagement7 extends HttpServlet
 						log.debug("subName = " + subName);
 						log.debug("subPass = " + subPass);
 						
-						String ApplicationRoot = getServletContext().getRealPath("");
-						Connection conn = Database.getChallengeConnection(ApplicationRoot, "BrokenAuthAndSessMangChalFlowers");
+
 						log.debug("Checking credentials");
 						PreparedStatement callstmt;
 						
@@ -180,6 +181,9 @@ public class SessionManagement7 extends HttpServlet
 			{
 				out.write(errors.getString("error.funky"));
 				log.fatal(levelName + " - " + e.toString());
+			}
+			finally {
+				Database.closeConnection(conn);
 			}
 		}
 		else

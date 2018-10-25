@@ -124,9 +124,6 @@ public class BrokenCrypto4 extends HttpServlet {
 					}
 				} catch (Exception e) {
 					log.debug("Could Not Find Coupon: " + e.toString());
-				} finally {
-				    try { prepstmt.close(); } catch (Exception e) { /* ignored */ }
-				    try { conn.close(); } catch (Exception e) { /* ignored */ }
 				}
 
 				// Work Out Final Cost
@@ -151,6 +148,10 @@ public class BrokenCrypto4 extends HttpServlet {
 			} catch (Exception e) {
 				log.debug("Didn't complete order: " + e.toString());
 				htmlOutput += "<p>" + bundle.getString("insecureCyrptoStorage.4.orderFailed") + "</p>";
+			} finally {
+				// try { prepstmt.close(); } catch (Exception e) { /* ignored */ }
+				// try { conn.close(); } catch (Exception e) { /* ignored */ }
+				Database.closeConnection(conn);
 			}
 			try {
 				Thread.sleep(1000);
