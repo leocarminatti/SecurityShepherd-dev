@@ -71,6 +71,10 @@ public class SqlInjectionStoredProcedure extends HttpServlet
 			out.print(getServletInfo());
 			String htmlOutput = new String();
 			
+			Connection conn = null;
+			Statement stmt = null;
+			ResultSet resultSet = null;
+			
 			try
 			{
 				String userIdentity = request.getParameter("userIdentity");
@@ -78,15 +82,10 @@ public class SqlInjectionStoredProcedure extends HttpServlet
 				String ApplicationRoot = getServletContext().getRealPath("");
 				
 				log.debug("Getting Connection to Database");
-				Connection conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeStoredProc");
+				conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeStoredProc");
 				//CallableStatement callstmt = conn.prepareCall("CALL findUser('" + userIdentity + "');");
-				Statement stmt = conn.createStatement();
-				//#Hackathon DK - SQL Injection
-				//ResultSet resultSet = stmt.executeQuery("CALL findUser('" + userIdentity + "');");
-				String query = "CALL findUser(?);";
-				PreparedStatement stmt = conn.prepareStatement(query);
-				stmt.setString(1, userIdentity);					
-				ResultSet resultSet = stmt.execute();
+				stmt = conn.createStatement();
+				resultSet = stmt.executeQuery("CALL findUser('" + userIdentity + "');");
 				
 				int i = 0;
 				htmlOutput = "<h2 class='title'>" + bundle.getString("response.searchResults")+ "</h2>";
@@ -102,7 +101,7 @@ public class SqlInjectionStoredProcedure extends HttpServlet
 						+ Encode.forHtml(resultSet.getString(4)) + "</td></tr>";
 					i++;
 				}
-				conn.close();
+				
 				htmlOutput += "</table>";
 				if(i == 0)
 				{
@@ -119,6 +118,26 @@ public class SqlInjectionStoredProcedure extends HttpServlet
 			{
 				out.write(errors.getString("error.funky"));
 				log.fatal(levelName + " - " + e.toString());
+			}
+			finally {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					resultSet.close();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				try {
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			log.debug("Outputting HTML");
 			out.write(htmlOutput);

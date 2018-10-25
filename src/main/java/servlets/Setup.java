@@ -9,6 +9,7 @@ import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -20,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import dbProcs.Constants;
@@ -42,6 +42,7 @@ public class Setup extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		String htmlOutput = new String();
 		boolean success = false;
+		Connection conn = Database.getDatabaseConnection(null);
 		try 
 		{
 			//Parameters From Form
@@ -52,8 +53,7 @@ public class Setup extends HttpServlet {
 			String dbAuth = request.getParameter("dbauth");
 			String dbOverride = request.getParameter("dboverride");
 
-			//FilenameUtils.normalize(Constants.SETUP_AUTH)
-			String auth = new String(Files.readAllBytes(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize()));
+			String auth = new String(Files.readAllBytes(Paths.get(Constants.SETUP_AUTH)));
 
 			StringBuffer dbProp = new StringBuffer();
 			dbProp.append("databaseConnectionURL=jdbc:mysql://" + dbHost + ":" + dbPort + "/");
@@ -70,8 +70,8 @@ public class Setup extends HttpServlet {
 			if (!auth.equals(dbAuth)) {
 				htmlOutput = bundle.getString("generic.text.setup.authentication.failed");
 			} else {
-				Files.write(Paths.get(FilenameUtils.normalize(Constants.DBPROP)).normalize(), dbProp.toString().getBytes(), StandardOpenOption.CREATE);	
-				if (Database.getDatabaseConnection(null) == null) {
+				Files.write(Paths.get(Constants.DBPROP), dbProp.toString().getBytes(), StandardOpenOption.CREATE);	
+				if (conn == null) {
 					htmlOutput = bundle.getString("generic.text.setup.connection.failed");
 				} else {
 					try {
@@ -88,7 +88,7 @@ public class Setup extends HttpServlet {
 						success = true;
 					} catch (InstallationException e) {
 						htmlOutput = bundle.getString("generic.text.setup.failed") + ": " +  e.getMessage();
-						FileUtils.deleteQuietly(new File(FilenameUtils.normalize(Constants.DBPROP)));
+						FileUtils.deleteQuietly(new File(Constants.DBPROP));
 					}
 					//Clean up File as it is not needed anymore. Will Cause a new one to be generated next time too
 					removeAuthFile();
@@ -107,6 +107,9 @@ public class Setup extends HttpServlet {
 			out.write(errors.getString("error.funky"));
 			log.fatal("Unexpected database config creation error: " + e.toString());
 		}
+		finally {
+			Database.closeConnection(conn);
+		}
 		out.close();
 	}
 
@@ -119,15 +122,17 @@ public class Setup extends HttpServlet {
 		} else {
 			isInstalled = true;
 		}
-
+		
+		Database.closeConnection(coreConnection);
+		
 		return isInstalled;
 	}
 
 	private static void generateAuth() {
 		try {
-			if (!Files.exists(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize(), LinkOption.NOFOLLOW_LINKS)) {
+			if (!Files.exists(Paths.get(Constants.SETUP_AUTH), LinkOption.NOFOLLOW_LINKS)) {
 				UUID randomUUID = UUID.randomUUID();
-				Files.write(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize(), randomUUID.toString().getBytes(), StandardOpenOption.CREATE);
+				Files.write(Paths.get(Constants.SETUP_AUTH), randomUUID.toString().getBytes(), StandardOpenOption.CREATE);
 				log.info("genrated UUID " + randomUUID + " in " + Constants.SETUP_AUTH);
 			}
 		} catch (IOException e) {
@@ -137,21 +142,24 @@ public class Setup extends HttpServlet {
 	}
 	
 	private static void removeAuthFile() {
-		if (!Files.exists(Paths.get(FilenameUtils.normalize(Constants.SETUP_AUTH)).normalize(), LinkOption.NOFOLLOW_LINKS)) {
+		if (!Files.exists(Paths.get(Constants.SETUP_AUTH), LinkOption.NOFOLLOW_LINKS)) {
 			log.info("Could not find " + Constants.SETUP_AUTH);
 		} else {
-			FileUtils.deleteQuietly(new File(FilenameUtils.normalize(Constants.SETUP_AUTH)));
+			FileUtils.deleteQuietly(new File(Constants.SETUP_AUTH));
 		}
 	}
 
 	private synchronized void executeSqlScript() throws InstallationException {
 
+		Connection databaseConnection = null;
+		Statement psProcToexecute = null;
+		
 		try {
 			File file = new File(getClass().getClassLoader().getResource("/database/coreSchema.sql").getFile());
 			String data = FileUtils.readFileToString(file, Charset.defaultCharset() );
 			
-			Connection databaseConnection = Database.getDatabaseConnection(null, true);
-			Statement psProcToexecute = databaseConnection.createStatement();
+			databaseConnection = Database.getDatabaseConnection(null, true);
+			psProcToexecute = databaseConnection.createStatement();
 			psProcToexecute.executeUpdate(data);
 			
 			file = new File(getClass().getClassLoader().getResource("/database/moduleSchemas.sql").getFile());
@@ -164,22 +172,53 @@ public class Setup extends HttpServlet {
 			e.printStackTrace();
 			throw new InstallationException(e);
 		}
+		finally {
+			try {
+				databaseConnection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				psProcToexecute.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private synchronized void executeUpdateScript() throws InstallationException {
 
+		Connection databaseConnection = null;
+		Statement psProcToexecute = null;
+		
 		try {
 			File file = new File(getClass().getClassLoader().getResource("/database/updatev3_0tov3_1.sql").getFile());
 			String data = FileUtils.readFileToString(file, Charset.defaultCharset() );
 
-			Connection databaseConnection = Database.getDatabaseConnection(null, true);
-			Statement psProcToexecute = databaseConnection.createStatement();
+			databaseConnection = Database.getDatabaseConnection(null, true);
+			psProcToexecute = databaseConnection.createStatement();
 			psProcToexecute.executeUpdate(data);
 
 		} catch (Exception e) {
 			log.fatal(e);
 			e.printStackTrace();
 			throw new InstallationException(e);
+		}
+		finally {
+			try {
+				databaseConnection.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				psProcToexecute.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

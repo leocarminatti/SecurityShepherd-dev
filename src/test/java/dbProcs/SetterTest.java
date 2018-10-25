@@ -419,6 +419,9 @@ public class SetterTest
 				log.fatal("Could not Query DB: " + e.toString());
 				fail("Could not Query DB for Module Status");
 			}
+			finally {
+				Database.closeConnection(conn);
+			}
 		}
 	}
 	
@@ -451,6 +454,9 @@ public class SetterTest
 			{
 				log.fatal("Could not Query DB: " + e.toString());
 				fail("Could not Query DB for Module Status");
+			}
+			finally {
+				Database.closeConnection(conn);
 			}
 		}
 	}
@@ -486,6 +492,9 @@ public class SetterTest
 				log.fatal("Could not Query DB: " + e.toString());
 				fail("Could not Query DB for Module Status");
 			}
+			finally {
+				Database.closeConnection(conn); 
+			}
 		}
 	}
 	
@@ -519,6 +528,9 @@ public class SetterTest
 			{
 				log.fatal("Could not Query DB: " + e.toString());
 				fail("Could not Query DB for Module Status");
+			}
+			finally {
+				Database.closeConnection(conn);
 			}
 		}
 	}
@@ -577,6 +589,9 @@ public class SetterTest
 					{
 						log.fatal("Could not Query DB: " + e.toString());
 						fail("Could not Query DB For Stored Message");
+					}
+					finally {
+						Database.closeConnection(conn);
 					}
 				}
 			}
@@ -922,14 +937,19 @@ public class SetterTest
 		String userName = new String("WasUserNowAdmin");
 		String currentRole = new String();
 		String newRole = new String();
+		Connection conn = Database.getCoreConnection(applicationRoot);
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		PreparedStatement ps2 = null;
+		ResultSet rs2 = null;
+		
 		try
 		{
 			if(GetterTest.verifyTestUser(applicationRoot, userName, userName))
 			{
-				Connection conn = Database.getCoreConnection(applicationRoot);
-				PreparedStatement ps = conn.prepareStatement("SELECT userRole FROM users WHERE userName = ?");
+				ps = conn.prepareStatement("SELECT userRole FROM users WHERE userName = ?");
 				ps.setString(1, userName);
-				ResultSet rs = ps.executeQuery();
+				rs = ps.executeQuery();
 				if(rs.next())
 				{
 					currentRole = rs.getString(1);
@@ -948,8 +968,6 @@ public class SetterTest
 				{
 					fail("User not found in DB after it was created");
 				}
-				rs.close();
-				conn.close();
 				String userId = Getter.getUserIdFromName(applicationRoot, userName);
 				if(!Setter.updateUserRole(applicationRoot, userId, newRole).equalsIgnoreCase(userName))
 				{
@@ -958,10 +976,10 @@ public class SetterTest
 				else
 				{
 					log.debug("Checking if change occurred");
-					conn = Database.getCoreConnection(applicationRoot);
-					ps = conn.prepareStatement("SELECT userRole FROM users WHERE userName = ?");
+					//conn2 = Database.getCoreConnection(applicationRoot);
+					ps2 = conn.prepareStatement("SELECT userRole FROM users WHERE userName = ?");
 					ps.setString(1, userName);
-					rs = ps.executeQuery();
+					rs2 = ps.executeQuery();
 					if(rs.next())
 					{
 						if(!newRole.equalsIgnoreCase(rs.getString(1)))
@@ -977,8 +995,6 @@ public class SetterTest
 					{
 						fail("Could not find user after creating and updating");
 					}
-					rs.close();
-					conn.close();
 				}
 			}
 			else
@@ -996,6 +1012,33 @@ public class SetterTest
 		{
 			log.fatal("Could not Verify User: " + e.toString());
 			fail("Could not Complete testUpdateUserRole");
+		}
+		finally {
+			try {
+				ps.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				/*ignored*/
+			}
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				/*ignored*/
+			}
+			try {
+				ps2.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				/*ignored*/
+			}
+			try {
+				rs2.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				/*ignored*/
+			}
+			Database.closeConnection(conn);
 		}
 	}
 	
