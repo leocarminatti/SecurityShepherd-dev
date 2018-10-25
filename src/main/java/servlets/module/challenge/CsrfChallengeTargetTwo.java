@@ -43,6 +43,7 @@ public class CsrfChallengeTargetTwo extends HttpServlet
 	private static final long serialVersionUID = 1L;
 	private static org.apache.log4j.Logger log = Logger.getLogger(CsrfChallengeTargetTwo.class);
 	private static String levelName = "CSRF 2 Target";
+	private static final String USER_ID_NOT_FOUND = "UserId could not be found.";
 	/**
 	 * CSRF vulnerable function that can be used by users to force other users to mark their CSRF challenge Two as complete.
 	 * @param userId User identifier to be incremented
@@ -88,7 +89,7 @@ public class CsrfChallengeTargetTwo extends HttpServlet
 					}
 					else
 					{
-						log.error("User could not be found.");
+						log.error(USER_ID_NOT_FOUND);
 					}
 				}
 				

@@ -77,7 +77,7 @@ if (request.getSession() != null)
 				<br />
 				<h3><%= bundle.getString("challenge.description.h3") %></h3>
 				<p><%= bundle.getString("challenge.description.p") %></p>
-				<form id="leForm" action="javascript:;">
+				<form id="leForm" action="javascript:;" method="post">
 					<table>
 					<tr><td><%= bundle.getString("challenge.form.pinNumber") %></td>	
 					<td><input type="password" id="pinNumber" maxlength="4" autocomplete="off" /></td></tr>

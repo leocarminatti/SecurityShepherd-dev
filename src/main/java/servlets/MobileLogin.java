@@ -115,7 +115,13 @@ public class MobileLogin extends HttpServlet
 			   JSONObject jsonObj = new JSONObject();
 			   jsonObj.put("JSESSIONID", ses.getId());
 			   jsonObj.put("token", csrfToken);
+			   try {
 			   out.write(jsonObj.toString());
+			   }catch(Exception e) {
+				   out.close();
+			   }finally{
+				   out.close();
+			   }
 			   return;
 		   }
 		   else
@@ -129,7 +135,7 @@ public class MobileLogin extends HttpServlet
 				{
 				    Thread.currentThread().interrupt();
 				}
-			   out.write("ERROR: Could not Authenticate");
+				log.error("ERROR: Could not Authenticate");
 			   return;
 		   }	
 	}

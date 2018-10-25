@@ -54,6 +54,10 @@ public class CsrfChallengeTargetFour extends HttpServlet
 	private static org.apache.log4j.Logger log = Logger.getLogger(CsrfChallengeTargetFour.class);
 	private static String levelName = "CSRF Target 4";
 	
+	private static final String USER_ID_NOT_FOUND = "UserId could not be found.";
+	private static final String USER_CSFR_ATTACK = "User CSRF attack failed due to invalid nonce";
+	private static final String USER_ATTACK_THEMSELVES = "User is attacking themselves";
+	
 	// OWASP Sanitizer
 			PolicyFactory policy = new HtmlPolicyBuilder()
 					.allowElements("a", "img")
@@ -128,17 +132,17 @@ public class CsrfChallengeTargetFour extends HttpServlet
 						}
 						else
 						{
-							log.error("User could not be found in system.");
+							log.error(USER_ID_NOT_FOUND);
 						}
 					}
 					else
 					{
-						log.debug("User " + plusId + " CSRF attack failed due to invalid nonce");
+						log.debug(USER_CSFR_ATTACK);
 					}
 				}
 				else
 				{
-					log.debug("User " + userId + " is attacking themselves");
+					log.debug(USER_ATTACK_THEMSELVES);
 				}
 				
 				if(result)

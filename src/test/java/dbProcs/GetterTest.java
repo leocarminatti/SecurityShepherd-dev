@@ -922,7 +922,7 @@ public class GetterTest
 						}
 						else
 						{
-							log.error("Could not find user name in this: " + csrfFourm);
+							log.error("Could not find user name");
 							fail("User was not contained in the CSRF iFrame Forum");
 						}
 					}
@@ -990,7 +990,7 @@ public class GetterTest
 							}
 							else
 							{
-								log.error("Could not find user name in this: " + csrfFourm);
+								log.error("Could not find user name in this");
 								fail("User was not contained in the CSRF Img Forum");
 							}
 						}
@@ -1051,7 +1051,7 @@ public class GetterTest
 								}
 								else
 								{
-									log.fatal("User's Feedback was not found in: " + feedback);
+									log.fatal("User's Feedback was not found ");
 									fail("Could not find user's feedback");
 								}
 							}
@@ -1541,7 +1541,7 @@ public class GetterTest
 						}
 						if(!pass)
 						{
-							log.error("Could not find in JSON Data: " + scoreboardData);
+							log.error("Could not find in JSON Data");
 							fail("Could not find user in scoreboard");
 						}
 						else
@@ -1727,13 +1727,13 @@ public class GetterTest
 						{
 							if(!pass)
 							{
-								log.error("Could not find username in JSON Data: " + scoreboardData);
+								log.error("Could not find username in JSON Data");
 								fail("Could not find user in scoreboard");
 							}
 							else
 							{
 								log.error("Could not see users from other class in total scoreboard data");
-								log.error("Could not find username in " + scoreboardData);
+								log.error("Could not find username");
 								fail("Could not see users from other class in total scoreboard data");
 							}
 						}
