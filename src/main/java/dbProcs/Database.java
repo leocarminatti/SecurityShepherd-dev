@@ -74,8 +74,12 @@ public class Database
 		   //Add DB Schema to the end of the connectionURL
 		   connectionURL= connectionURL + FileInputProperties.readfile(props, "databaseConnectionURL");
 		   //log.debug("Connection URL: " + connectionURL);
-		   String username=FileInputProperties.readfile(props, "databaseUsername");
-		   String password=FileInputProperties.readfile(props, "databasePassword");
+		   
+		   String evDatabaseUsername = System.getenv("databaseUsername");
+		   String evDatabasePassword = System.getenv("databasePassword");
+		   
+		   String username=FileInputProperties.readfile(props, evDatabaseUsername);
+		   String password=FileInputProperties.readfile(props, evDatabasePassword);
 		   
 		   conn = DriverManager.getConnection(connectionURL,username,password);
 	   }
