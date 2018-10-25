@@ -132,7 +132,10 @@ public class NoSqlInjection1 extends HttpServlet
 				log.debug("Servlet root = " + ApplicationRoot );
 				
 				//whereQuery.put("_id", gamerId);
-				DBObject whereQuery = new BasicDBObject("$where", "this._id == '" + gamerId + "'");
+				// A query no Mongo foi alterada para evitar NoSQL injection, adicionando os termos de pesquisa via
+				// parametrizacao e nao concatenacao de strings nao sanitizadas
+			    BasicDBObject whereQuery = new BasicDBObject();
+			    whereQuery.put("this._id", new BasicDBObject("$eq", gamerId));
 				cursor = coll.find(whereQuery);
 				
 				Object id;

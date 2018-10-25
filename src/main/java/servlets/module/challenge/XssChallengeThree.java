@@ -20,6 +20,9 @@ import utils.Hash;
 import utils.ShepherdLogManager;
 import utils.Validate;
 import utils.XssFilter;
+
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 /**
  * Cross Site Scripting Challenge Three control class.
  * <br/><br/>
@@ -46,6 +49,16 @@ public class XssChallengeThree extends HttpServlet
 	private static org.apache.log4j.Logger log = Logger.getLogger(XssChallengeThree.class);
 	private static String levelName = "Cross Site Scripting Challenge Three";
 	private static String levelHash = "ad2628bcc79bf10dd54ee62de148ab44b7bd028009a908ce3f1b4d019886d0e";
+	
+	// OWASP Sanitizer
+				PolicyFactory policy = new HtmlPolicyBuilder()
+						.allowElements("a", "img")
+						.allowUrlProtocols("https")
+						.allowAttributes("href", "src")
+						.onElements("a", "img")
+						.requireRelNofollowOnLinks()
+						.toFactory();
+				
 	/**
 	 * Cross Site Request Forgery safe Reflected XSS vulnerability. cannot be remotly deployed, and therfore only is executable against the person initating the funciton.
 	 * @param searchTerm To be spat back out at the user after been filtered
@@ -99,7 +112,7 @@ public class XssChallengeThree extends HttpServlet
 						searchTerm +
 						"</p>";
 					log.debug("Outputting HTML");
-					out.write(htmlOutput);
+					out.write(policy.sanitize(htmlOutput));
 				}
 			}
 		}

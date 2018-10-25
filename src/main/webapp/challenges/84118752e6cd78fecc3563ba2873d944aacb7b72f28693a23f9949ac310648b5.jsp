@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" import="java.sql.*,java.io.*,java.net.*,org.owasp.encoder.Encode, dbProcs.*, utils.*" errorPage="" %>
 <%@ page import="java.util.Locale, java.util.ResourceBundle"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%
 	// Cross Site Request Forgery Challenge 4
 
@@ -88,7 +89,7 @@ if (request.getSession() != null)
 				<%= bundle.getString("challenge.withTheseParameters") %> <a>userId = <%= bundle.getString("challenge.userIdExample") %></a> & <a>csrfToken = <%= bundle.getString("challenge.yourCsrfTokenCamelCase") %></a>
 				<br/>
 				<br/>
-				<%= bundle.getString("challenge.whereIdIsUserBeenIncremented.1") %> <%= bundle.getString("challenge.userIdExample") %> <%= bundle.getString("challenge.whereIdIsUserBeenIncremented.2") %> <%=bundle.getString("challenge.yourIdIs") %> <%= userId %> <%=bundle.getString("challenge.yourCsrfTokenIs") %> <a><%= csrfChal4Token %></a><%= bundle.getString("challenge.yourIdIs.1") %>
+				${fn:escapeXml(bundle.getString("challenge.whereIdIsUserBeenIncremented.1"))} ${fn:escapeXml(bundle.getString("challenge.userIdExample"))} ${fn:escapeXml(bundle.getString("challenge.whereIdIsUserBeenIncremented.2"))} ${fn:escapeXml(bundle.getString("challenge.yourIdIs"))} ${fn:escapeXml(bundle.getString("challenge.yourIdIs"))} ${fn:escapeXml(userId)} ${fn:escapeXml(bundle.getString("challenge.yourCsrfTokenIs"))}<a>${fn:escapeXml(csrfChal4Token)}</a>${fn:escapeXml(bundle.getString("challenge.yourIdIs.1"))}
 				<br/>
 				<br/>
 				<%= bundle.getString("challenge.useForumForIframe") %>

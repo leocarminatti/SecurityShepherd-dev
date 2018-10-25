@@ -44,6 +44,7 @@ public class GetCheat extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	private static org.apache.log4j.Logger log = Logger.getLogger(GetCheat.class);
+	private static final String CSRF_ATTACK = "CSRF Attack Detected";
 	
 	/**
 	 * This method will reject requests if cheat sheet availability is marked as unavailable by administration.
@@ -92,7 +93,7 @@ public class GetCheat extends HttpServlet
 			}
 			else
 			{
-				log.error("CSRF Attack Detected: Made Against" + ses.getAttribute("userName"));
+				log.error(CSRF_ATTACK);
 			}
 		}
 		else

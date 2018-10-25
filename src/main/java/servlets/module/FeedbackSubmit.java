@@ -44,6 +44,8 @@ public class FeedbackSubmit extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	private static org.apache.log4j.Logger log = Logger.getLogger(SolutionSubmit.class);
+	private static final String USER_WARNED = " has been warned and potentially has lost points";
+	private static final String INVOKE_BAD_PROCEDURE = "Invoking Bad Submission procedure...";
 	/**
 	 * Initiated by a dynamic form returned by servlets.module.SolutionSubmit.doPost() 
 	 * this method checks the existence of the submitted module identifier before ensuring that the submission is correct.
@@ -172,9 +174,9 @@ public class FeedbackSubmit extends HttpServlet
 									"Incorrect Solution Key Submitted.<br><br>You have limited amounts of incorrect key submissions before you will loose 10% of your points. Contact the OWASP Security Shepherd if you think you have found the correct key but it is failing you." +
 									"</font></p>");
 							
-							log.error("Invoking Bad Submission procedure...");
+							log.error(INVOKE_BAD_PROCEDURE);
 							Setter.incrementBadSubmission(ApplicationRoot, userId);
-							log.error("User has been warned and potentially has lost points");
+							log.error(USER_WARNED);
 						}
 					}
 					else

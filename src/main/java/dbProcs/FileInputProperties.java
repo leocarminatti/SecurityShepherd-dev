@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
 public class FileInputProperties 
 {
 	private static org.apache.log4j.Logger log = Logger.getLogger(FileInputProperties.class);
-	
+	private static final String FILE_NOT_FOUND = "Error: Properties file can not be found: ";
 	/**
 	 * Reads the properties file for a specific property and returns it as a string.
 	 * @param filename The file to read
@@ -79,12 +79,14 @@ public class FileInputProperties
 	    } 
 	    catch (FileNotFoundException e) 
 	    {
-	    	log.error("Error: Properties filename: can not be found: " + e.getMessage());
+	    	log.error(FILE_NOT_FOUND);
+	    	log.error(e.toString());
 	    	result = result +  e.toString();
 	    } 
 	    catch (IOException e) 
 	    {
-	    	log.error("Error: Properties filename: can not be opened: " + e.getMessage());
+	    	log.error(FILE_NOT_FOUND);
+	    	log.error(e.toString());
 	    	result = result + e.toString();
 	    }
 	    return result;
