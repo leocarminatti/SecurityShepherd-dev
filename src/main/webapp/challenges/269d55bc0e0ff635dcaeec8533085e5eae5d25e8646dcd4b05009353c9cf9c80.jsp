@@ -70,7 +70,7 @@ if (request.getSession() != null)
 			<p> 
 				<%= bundle.getString("challenge.description") %>
 				<br />
-				<form id="leForm" action="javascript:;">
+				<form id="leForm" action="javascript:;" autocomplete="off">
 					<div id="resultsDiv">
 						<table>
 							<tr><td>
@@ -81,7 +81,7 @@ if (request.getSession() != null)
 							<tr><td>
 								<%= bundle.getString("challenge.form.password") %>
 							</td><td>
-								<input type="password" id="subPassword"/>
+								<input type="password" id="subPassword" autocomplete="off" />
 							</td></tr>
 							<tr><td colspan="2">
 								<div id="submitButton"><input type="submit" value="<%= bundle.getString("challenge.form.signIn") %>"/></div>

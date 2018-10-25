@@ -77,13 +77,13 @@ if(ses.getAttribute("errorMessage") != null)
 	<div id="formDiv" class="post">
 		<h1 class="title">Create New Admin</h1>
 		<div id="createUserDiv" class="entry">
-			<form id="theForm" action="javascript:;">
+			<form id="theForm" action="javascript:;" autocomplete="off">
 			<p>Please input what data you want the new administrator to have. Please note that the password will be temporary.</p>
 			<input type="hidden" id="csrfToken" value="<%= csrfToken %>"/>
 				<table align="center">
 					<tr><td><p>Username<font color="red"><small>* </small></font> :</p></td><td><input type="text" id="userName" value="<%= newUserName %>"/></td></tr>
-					<tr><td><p>Password<font color="red"><small>* </small></font> :</p></td><td><input type="password" id="passWord" /></td></tr>
-					<tr><td><p>Confirm Password<font color="red"><small>* </small></font> :</p></td><td><input type="password" id="passWordConfirm" /></td></tr>
+					<tr><td><p>Password<font color="red"><small>* </small></font> :</p></td><td><input type="password" id="passWord" autocomplete="off"/></td></tr>
+					<tr><td><p>Confirm Password<font color="red"><small>* </small></font> :</p></td><td><input type="password" id="passWordConfirm" autocomplete="off" /></td></tr>
 					<tr><td><p>Email Address:</p></td><td><input type="text" id="userAddress" value="<%= userAddress %>"/></td></tr>
 					<tr><td><p>Confirm Address:</p></td><td><input type="text" id="userAddressCnf" /></td></tr>
 					<tr><td colspan="2" align="center">
