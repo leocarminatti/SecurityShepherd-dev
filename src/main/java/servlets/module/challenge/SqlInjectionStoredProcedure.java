@@ -81,7 +81,12 @@ public class SqlInjectionStoredProcedure extends HttpServlet
 				Connection conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeStoredProc");
 				//CallableStatement callstmt = conn.prepareCall("CALL findUser('" + userIdentity + "');");
 				Statement stmt = conn.createStatement();
-				ResultSet resultSet = stmt.executeQuery("CALL findUser('" + userIdentity + "');");
+				//#Hackathon DK - SQL Injection
+				//ResultSet resultSet = stmt.executeQuery("CALL findUser('" + userIdentity + "');");
+				String query = "CALL findUser(?);";
+				PreparedStatement stmt = conn.prepareStatement(query);
+				stmt.setString(1, userIdentity);					
+				ResultSet resultSet = stmt.execute();
 				
 				int i = 0;
 				htmlOutput = "<h2 class='title'>" + bundle.getString("response.searchResults")+ "</h2>";

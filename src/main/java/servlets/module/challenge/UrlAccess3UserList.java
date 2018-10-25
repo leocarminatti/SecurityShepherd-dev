@@ -99,7 +99,13 @@ public class UrlAccess3UserList extends HttpServlet
 				String ApplicationRoot = getServletContext().getRealPath("");
 				Connection conn = Database.getChallengeConnection(ApplicationRoot, "UrlAccessThree");
 				PreparedStatement callstmt;
-				callstmt = conn.prepareStatement("SELECT userName FROM users WHERE userRole = \"admin\" OR userName = \"" + currentUser + "\";");
+				//#Hackathon DK - SQL Injection
+				//callstmt = conn.prepareStatement("SELECT userName FROM users WHERE userRole = \"admin\" OR userName = \"" + currentUser + "\";");
+				String query = "SELECT userName FROM users WHERE userRole = \"admin\" OR userName = ?;";
+				PreparedStatement stmt = conn.prepareStatement(query);
+				stmt.setString(1, currentUser);				
+				ResultSet resultSet = stmt.execute();
+				
 				log.debug("Getting User List");
 				htmlOutput = new String();
 				ResultSet rs = callstmt.executeQuery();

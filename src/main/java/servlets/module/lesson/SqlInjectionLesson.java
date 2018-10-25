@@ -133,7 +133,13 @@ extends HttpServlet
 			Connection conn = Database.getSqlInjLessonConnection(ApplicationRoot);
 			Statement stmt;
 			stmt = conn.createStatement();
-			ResultSet resultSet = stmt.executeQuery("SELECT * FROM tb_users WHERE username = '" + username + "'");
+			//#Hackathon DK - SQL Injection
+			//ResultSet resultSet = stmt.executeQuery("SELECT * FROM tb_users WHERE username = '" + username + "'");
+			String query = "SELECT * FROM tb_users WHERE username = ?";
+			PreparedStatement stmt = conn.prepareStatement(query);
+			stmt.setString(1, username);					
+			ResultSet resultSet = stmt.execute();
+			
 			log.debug("Opening Result Set from query");
 			for(int i = 0; resultSet.next(); i++)
 			{
