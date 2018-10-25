@@ -151,8 +151,6 @@ public class Getter
 					return result;
 				}
 			}
-			callstmt.close();
-			conn.close();
 		} 
 		catch (SQLException e) 
 		{
@@ -160,7 +158,9 @@ public class Getter
 			result = null;
 			//Lagging Response
 		}
+		finally {
 		Database.closeConnection(conn);
+		}
 		log.debug("$$$ End authUser $$$");
 		return result;
 	}
@@ -381,9 +381,9 @@ public class Getter
 	{
 		ResultSet result = null;
 		log.debug("*** Getter.getClassInfo (All Classes) ***");
+		Connection conn = Database.getCoreConnection(ApplicationRoot);
 		try
 		{
-			Connection conn = Database.getCoreConnection(ApplicationRoot);
 			CallableStatement callstmt = conn.prepareCall("call classesGetData()");
 			log.debug("Gathering classesGetData ResultSet");
 			result = callstmt.executeQuery();
@@ -395,6 +395,9 @@ public class Getter
 		{
 			log.error("Could not execute query: " + e.toString());
 			result = null;
+		}
+		finally {
+			Database.closeConnection(conn);
 		}
 		log.debug("*** END getClassInfo");
 		return result;
@@ -425,6 +428,9 @@ public class Getter
 		{
 			log.error("Could not execute query: " + e.toString());
 			result = null;
+		}
+		finally {
+			Database.closeConnection(conn);
 		}
 		log.debug("*** END getClassInfo");
 		return result;
@@ -1526,6 +1532,9 @@ public class Getter
 			log.error("Could not execute query: " + e.toString());
 			result = null;
 		}
+		finally {
+			Database.closeConnection(conn);
+		}
 		log.debug("*** END getPlayersByClass");
 		return result;
 	}
@@ -1932,7 +1941,9 @@ public class Getter
 		{
 			log.error("isModuleOpen Error: " + e.toString());
 		}
-		Database.closeConnection(conn);
+		finally {
+			Database.closeConnection(conn);	
+		}
 		return result;
 	}
 	
@@ -1956,6 +1967,9 @@ public class Getter
 		{
 			log.error("Could not execute query: " + e.toString());
 			result = null;
+		}
+		finally{
+			Database.closeConnection(conn);
 		}
 		log.debug("*** END adminGetAll ***");
 		return result;

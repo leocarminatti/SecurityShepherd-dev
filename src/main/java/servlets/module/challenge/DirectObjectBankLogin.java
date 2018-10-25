@@ -104,10 +104,6 @@ public class DirectObjectBankLogin extends HttpServlet
 				}
 				log.debug("Outputting HTML");
 				out.write(htmlOutput);
-				resultSet.close();
-				callstmt.close();
-				conn.close();
-				Database.closeConnection(conn);
 			}
 			catch(SQLException e)
 			{
@@ -118,6 +114,9 @@ public class DirectObjectBankLogin extends HttpServlet
 			{
 				out.write(errors.getString("error.funky"));
 				log.fatal(levelName + " - " + e.toString());
+			}
+			finally {
+				Database.closeConnection(conn);
 			}
 		}
 		else

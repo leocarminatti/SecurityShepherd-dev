@@ -88,8 +88,6 @@ public class DirectObjectBankRegistration extends HttpServlet
 				log.debug("Outputting HTML");
 				htmlOutput = bundle.getString("register.accountCreated");
 				out.write(htmlOutput);
-				callstmt.close();
-				conn.close();
 				Database.closeConnection(conn);
 			}
 			catch(SQLException e)
@@ -101,6 +99,9 @@ public class DirectObjectBankRegistration extends HttpServlet
 			{
 				out.write(errors.getString("error.funky"));
 				log.fatal(levelName + " - " + e.toString());
+			}
+			finally {
+				Database.closeConnection(conn);
 			}
 		}
 		else

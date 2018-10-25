@@ -81,8 +81,7 @@ public class SessionManagement5SetToken extends HttpServlet
 			
 			String htmlOutput = new String();
 			log.debug(levelName + " Servlet Accessed");
-			try
-			{
+
 				log.debug("Getting Parameters");
 				Object nameObj = request.getParameter("subUserName");
 				String userName = new String();
@@ -96,6 +95,8 @@ public class SessionManagement5SetToken extends HttpServlet
 				
 				Connection conn = Database.getChallengeConnection(ApplicationRoot, "BrokenAuthAndSessMangChalFive");
 				log.debug("Checking name");
+				try
+				{
 				PreparedStatement callstmt;
 				
 				log.debug("Committing changes made to database");
@@ -127,6 +128,9 @@ public class SessionManagement5SetToken extends HttpServlet
 				out.write(errors.getString("error.funky"));
 				log.fatal(levelName + " - " + e.toString());
 			}
+				finally {
+					Database.closeConnection(conn);
+				}
 		}
 		else
 		{
