@@ -78,7 +78,9 @@ public class ChangePassword extends HttpServlet
 					if(newPassword != null && passwordConfirm != null) {
 						validData = newPassword.equalsIgnoreCase(passwordConfirm) && !newPassword.isEmpty() && newPassword != null;
 					}
+					if(currentPassword != null) {
 					passwordChange = !currentPassword.equalsIgnoreCase(newPassword);
+					}
 					if(newPassword != null) {
 						validPassword = newPassword.length() > 4 && newPassword.length() <= 512;
 					}

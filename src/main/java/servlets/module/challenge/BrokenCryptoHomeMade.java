@@ -132,6 +132,7 @@ public class BrokenCryptoHomeMade extends HttpServlet
 							{
 								String submittedSolution = request.getParameter("theSubmission");
 								String expectedSolution = BrokenCryptoHomeMade.generateUserSolutionKeyOnly(BrokenCryptoHomeMade.challenges.get(4).get(1), ses.getAttribute("userName").toString());
+								if(submittedSolution != null) {
 								if(submittedSolution.equals(expectedSolution))
 								{
 									log.debug("Correct Solution Submitted for 'This Challenge'. Returning Key");
@@ -159,6 +160,7 @@ public class BrokenCryptoHomeMade extends HttpServlet
 										htmlOutput += "<p>" + bundle.getString("insecureCyrptoStorage.homemade.badanswer.notLockedOut") + "</p>";
 										ses.setAttribute("homemadebadanswers", homemadebadanswers);
 									}
+								}
 								}
 							}
 							else
@@ -207,7 +209,7 @@ public class BrokenCryptoHomeMade extends HttpServlet
 							String name = new String();
 							if(request.getParameter("name") != null)
 							{
-								name = request.getParameter("name").toString();
+								name = request.getParameter("name");
 							}
 							if(name.length() < 4)
 							{

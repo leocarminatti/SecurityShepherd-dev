@@ -84,7 +84,7 @@ public class AssignPlayers extends HttpServlet
 					//Validation
 					notNull = (players != null);
 					log.debug("Ensuring strings are not empty");
-					if(classId.isEmpty())
+					if(classId != null && classId.isEmpty())
 					{
 						log.debug("classId is empty; nulling");
 						classId = null;

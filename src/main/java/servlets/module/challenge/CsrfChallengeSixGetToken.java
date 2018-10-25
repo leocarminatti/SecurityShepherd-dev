@@ -73,7 +73,7 @@ public class CsrfChallengeSixGetToken extends HttpServlet
 			{
 				log.debug(levelName + " servlet accessed by: " + ses.getAttribute("userName").toString());
 				String htmlOutput = new String("Your csrf Token for this Challenge is: ");
-				String userId = request.getParameter("userId").toString();
+				String userId = request.getParameter("userId");
 				
 				Connection conn = Database.getChallengeConnection(getServletContext().getRealPath(""), "csrfChallengeSix");
 				try

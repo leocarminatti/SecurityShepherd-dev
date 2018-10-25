@@ -70,6 +70,7 @@ public class BrokenCrypto3 extends HttpServlet
 			try
 			{
 				String userData = request.getParameter("userData");
+				if(userData != null) {
 				log.debug("User Submitted - " + userData);
 				
 				log.debug("Decrypting user input");
@@ -80,6 +81,7 @@ public class BrokenCrypto3 extends HttpServlet
 				htmlOutput = "<h2 class='title'>" + bundle.getString("insecureCyrptoStorage.3.plaintextResult") + "</h2><p>" + bundle.getString("insecureCyrptoStorage.3.plaintextResult.message") + "<br/><br/><em>"
 						+ Encode.forHtml(decryptedUserData)
 						+ "</em></p>";
+				}
 			}
 			catch(Exception e)
 			{

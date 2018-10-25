@@ -76,8 +76,10 @@ public class CsrfChallengeJSON extends HttpServlet
 				if(Validate.validateTokens(tokenCookie, tokenParmeter))
 				{
 					String myMessage = request.getParameter("myMessage");
-					log.debug("User Submitted - " + myMessage);
-					myMessage = Validate.makeValidUrl(myMessage);
+					if(null!=myMessage) {
+						log.debug("User Submitted - " + myMessage);
+						myMessage = Validate.makeValidUrl(myMessage);
+					}
 					
 					log.debug("Updating User's Stored Message");
 					String ApplicationRoot = getServletContext().getRealPath("");
