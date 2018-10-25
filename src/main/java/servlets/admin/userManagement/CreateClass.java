@@ -87,12 +87,15 @@ public class CreateClass extends HttpServlet
 					log.debug("Checking for nulls");
 					notNull = (classYear != null && className != null);
 					log.debug("Ensuring strings are not empty");
-					notEmpty = (!classYear.isEmpty() && !className.isEmpty());
+					if(notNull) {
+						notEmpty = (!classYear.isEmpty() && !className.isEmpty());
+					}
 					log.debug("Validating Year");
 					validYear = Validate.isValidClassYear(classYear);
 					log.debug("Validating Name");
-					classValidate = className.length() > 4 && className.length() <= 32;
-	
+					if(className != null) {
+						classValidate = className.length() > 4 && className.length() <= 32;
+					}
 					if(notNull && notEmpty && validYear && classValidate)
 					{
 						String reponseMessage = new String();

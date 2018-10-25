@@ -69,7 +69,9 @@ public class EnableModuleBlock extends HttpServlet
 					
 					log.debug("Getting Parameters");
 					String moduleId = (String)request.getParameter("moduleId");;
-					log.debug("moduleId = " + moduleId.toString());
+					if(moduleId != null) {
+						log.debug("moduleId = " + moduleId.toString());
+					}
 					String blockedMessage = Validate.validateParameter(request.getParameter("blockedMessage"), 500);
 					
 					String message = new String();

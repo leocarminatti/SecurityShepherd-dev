@@ -82,10 +82,13 @@ public class SolutionSubmit extends HttpServlet
 					
 					log.debug("Getting Parameters");
 					String moduleId = (String)request.getParameter("moduleId");;
-					log.debug("moduleId = " + moduleId.toString());
+					if(moduleId != null) {
+						log.debug("moduleId = " + moduleId.toString());
+					}
 					String solutionKey = (String)request.getParameter("solutionKey");;
+					if(solutionKey != null) {
 					log.debug("solutionKey = " + solutionKey.toString());
-					
+					}
 					log.debug("Getting session parameters");
 					String userId = (String)ses.getAttribute("userStamp");
 					String userName = (String)ses.getAttribute("userName");

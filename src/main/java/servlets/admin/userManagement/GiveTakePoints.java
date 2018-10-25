@@ -70,7 +70,9 @@ public class GiveTakePoints extends HttpServlet
 					
 					log.debug("Getting Parameters");
 					String player = (String)request.getParameter("player");
-					log.debug("player = " + player.toString());
+					if(player != null) {
+						log.debug("player = " + player.toString());
+					}
 					String amountOfPointsString = (String)request.getParameter("numberOfPoints");
 					log.debug("amountOfPointsString = " + amountOfPointsString);
 					int amountOfPoints = Integer.parseInt(amountOfPointsString);
