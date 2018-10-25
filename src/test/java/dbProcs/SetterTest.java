@@ -975,10 +975,10 @@ public class SetterTest
 					//conn2 = Database.getCoreConnection(applicationRoot);
 					PreparedStatement ps2 = conn.prepareStatement("SELECT userRole FROM users WHERE userName = ?");
 					ps2.setString(1, userName);
-					ResultSet rs2 = ps.executeQuery();
-					if(rs.next())
+					ResultSet rs2 = ps2.executeQuery();
+					if(rs2.next())
 					{
-						if(!newRole.equalsIgnoreCase(rs.getString(1)))
+						if(!newRole.equalsIgnoreCase(rs2.getString(1)))
 						{
 							fail("User Role was not updated in DB");
 						}

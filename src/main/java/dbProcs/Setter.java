@@ -12,6 +12,8 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
+import utils.SqlFilter;
+
 /**
  * Used to add information to the Database <br/>
  * <br/>
@@ -110,7 +112,7 @@ public class Setter {
 		try {
 			log.debug("Prepairing bad Submission call");
 			PreparedStatement callstmnt = conn.prepareCall("CALL userBadSubmission(?)");
-			callstmnt.setString(1, userId);
+			callstmnt.setString(1, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(userId)))));
 			log.debug("Executing userBadSubmission statement on id '" + userId + "'");
 			callstmnt.execute();
 			result = true;
@@ -238,7 +240,7 @@ public class Setter {
 		try {
 			log.debug("Prepairing resetUserBadSubmission call");
 			PreparedStatement callstmnt = conn.prepareCall("CALL resetUserBadSubmission(?)");
-			callstmnt.setString(1, userId);
+			callstmnt.setString(1, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(userId)))));
 			log.debug("Executing resetUserBadSubmission statement on id '" + userId + "'");
 			callstmnt.execute();
 			result = true;
@@ -311,7 +313,7 @@ public class Setter {
 			log.debug("Preparing setSsrfChallengeFourToken call");
 			PreparedStatement callstmnt = conn
 					.prepareStatement("SELECT csrfTokenscol FROM csrfTokens WHERE userId = ?");
-			callstmnt.setString(1, userId);
+			callstmnt.setString(1, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(userId)))));
 			log.debug("Executing setCsrfChallengeFourToken");
 			ResultSet rs = callstmnt.executeQuery();
 			if (rs.next()) {
@@ -329,7 +331,7 @@ public class Setter {
 				whatToDo = "INSERT INTO `csrfChallengeFour`.`csrfTokens` (`csrfTokenscol`, `userId`) VALUES (?, ?)";
 			callstmnt = conn.prepareStatement(whatToDo);
 			callstmnt.setString(1, csrfToken);
-			callstmnt.setString(2, userId);
+			callstmnt.setString(2, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(userId)))));
 			callstmnt.execute();
 			callstmnt.close();
 		} catch (SQLException e) {
@@ -360,7 +362,7 @@ public class Setter {
 			log.debug("Preparing setCsrfChallengeSevenToken call");
 			PreparedStatement callstmnt = conn
 					.prepareStatement("SELECT csrfTokenscol FROM csrfTokens WHERE userId = ?");
-			callstmnt.setString(1, userId);
+			callstmnt.setString(1, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(userId)))));
 			log.debug("Executing setCsrfChallengeSevenToken");
 			ResultSet rs = callstmnt.executeQuery();
 			if (rs.next()) {
@@ -379,7 +381,7 @@ public class Setter {
 				whatToDo = "INSERT INTO `csrfChallengeEnumTokens`.`csrfTokens` (`csrfTokenscol`, `userId`) VALUES (?, ?)";
 			callstmnt = conn.prepareStatement(whatToDo);
 			callstmnt.setString(1, csrfToken);
-			callstmnt.setString(2, userId);
+			callstmnt.setString(2, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(userId)))));
 			callstmnt.execute();
 			result = true;
 			callstmnt.close();
@@ -505,8 +507,8 @@ public class Setter {
 			CallableStatement callstmt = conn.prepareCall("call resultMessageSet(?, ?, ?)");
 			log.debug("Preparing resultMessageSet procedure");
 			callstmt.setString(1, message);
-			callstmt.setString(2, userId);
-			callstmt.setString(3, moduleId);
+			callstmt.setString(2, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(userId)))));
+			callstmt.setString(3, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(moduleId)))));
 			callstmt.execute();
 			log.debug("Executed resultMessageSet");
 			result = true;
@@ -600,8 +602,8 @@ public class Setter {
 		try {
 			CallableStatement callstmt = conn.prepareCall("call resultMessagePlus(?, ?)");
 			log.debug("Preparing resultMessagePlus procedure");
-			callstmt.setString(1, moduleId);
-			callstmt.setString(2, userId);
+			callstmt.setString(1, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(moduleId)))));
+			callstmt.setString(2, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(userId)))));
 			callstmt.execute();
 			result = true;
 		} catch (SQLException e) {
@@ -697,8 +699,8 @@ public class Setter {
 		try {
 			log.debug("Preparing playerUpdateClass call");
 			CallableStatement callstmnt = conn.prepareCall("call playerUpdateClass(?, ?)");
-			callstmnt.setString(1, playerId);
-			callstmnt.setString(2, classId);
+			callstmnt.setString(1, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(playerId)))));
+			callstmnt.setString(2, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(classId)))));
 			log.debug("Executing playerUpdateClass");
 			ResultSet resultSet = callstmnt.executeQuery();
 			resultSet.next();
@@ -772,8 +774,8 @@ public class Setter {
 		try {
 			log.debug("Preparing userUpdateResult call");
 			CallableStatement callstmnt = conn.prepareCall("call userUpdateResult(?, ?, ?, ?, ?, ?)");
-			callstmnt.setString(1, moduleId);
-			callstmnt.setString(2, userId);
+			callstmnt.setString(1, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(moduleId)))));
+			callstmnt.setString(2, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(userId)))));
 			callstmnt.setInt(3, before);
 			callstmnt.setInt(4, after);
 			callstmnt.setInt(5, difficulty);

@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -21,6 +20,7 @@ import org.owasp.encoder.Encode;
 
 import utils.Hash;
 import utils.ShepherdLogManager;
+import utils.SqlFilter;
 import utils.Validate;
 import dbProcs.Database;
 /**
@@ -92,7 +92,7 @@ public class SqlInjection6 extends HttpServlet
 				//		conn.prepareStatement("SELECT userName FROM users WHERE userPin = '" + userPin + "'");
 				PreparedStatement prepstmt = 
 						conn.prepareStatement("SELECT userName FROM users WHERE userPin =?");
-				prepstmt.setString(1, userPin);				
+				prepstmt.setString(1, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(userPin)))));				
 				ResultSet users = prepstmt.executeQuery();
 				try
 				{

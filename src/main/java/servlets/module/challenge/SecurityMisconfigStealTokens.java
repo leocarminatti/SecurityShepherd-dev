@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 
 import utils.Hash;
 import utils.ShepherdLogManager;
+import utils.SqlFilter;
 import utils.Validate;
 import dbProcs.Database;
 
@@ -155,7 +156,7 @@ public class SecurityMisconfigStealTokens extends HttpServlet
 		try 
 		{
 			CallableStatement getTokenCs = conn.prepareCall("call getToken(?)");
-			getTokenCs.setString(1, userId);
+			getTokenCs.setString(1, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(userId)))));
 			log.debug("Executing getToken procedure...");
 			ResultSet tokenRs = getTokenCs.executeQuery();
 			if(tokenRs.next())
@@ -198,7 +199,7 @@ public class SecurityMisconfigStealTokens extends HttpServlet
 		try 
 		{
 			CallableStatement validateTokenCs = conn.prepareCall("call validToken(?, ?)");
-			validateTokenCs.setString(1, userId);
+			validateTokenCs.setString(1, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(userId)))));
 			validateTokenCs.setString(2, token);
 			log.debug("Executing validToken procedure...");
 			ResultSet tokenRs = validateTokenCs.executeQuery();

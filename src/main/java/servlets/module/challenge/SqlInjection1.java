@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -21,6 +20,7 @@ import org.owasp.encoder.Encode;
 
 
 import utils.ShepherdLogManager;
+import utils.SqlFilter;
 import utils.Validate;
 import dbProcs.Database;
 
@@ -93,7 +93,7 @@ public class SqlInjection1 extends HttpServlet
 				//#Hackathon DK - SQL Injection
 				String query = "SELECT * FROM customers WHERE customerId =?";
 				PreparedStatement stmt = conn.prepareStatement(query);
-				stmt.setString(1, aUserId);			
+				stmt.setString(1, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(aUserId)))));			
 				ResultSet resultSet = stmt.executeQuery();				
 				//ResultSet resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerId = \"" + aUserId + "\"");
 				

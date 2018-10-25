@@ -90,7 +90,7 @@ if(ses.getAttribute("loginFailed") != null)
 				<% } if(!loginFailed.isEmpty()) {%>
 					<p><strong><font color="red"><%= loginFailed %></font></strong></p>
 				<% } %>
-				<form name="loginForm" method="POST" action="login">
+				<form name="loginForm" action="login" method="post">
 					<table>
 						<tr><td><p><fmt:message key="generic.text.username" />:</td><td><input type="text" name="login" value="" autocomplete="OFF" autofocus/></p></td></tr>
 						<tr><td><p><fmt:message key="generic.text.password" />:&nbsp;&nbsp;&nbsp;&nbsp;

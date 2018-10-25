@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import utils.ShepherdLogManager;
+import utils.SqlFilter;
 import utils.Validate;
 import dbProcs.Database;
 
@@ -111,8 +112,8 @@ public class DirectObjectBankTransfer extends HttpServlet {
 				if (performTransfer) {
 					log.debug("Valid Data Submitted, transfering Funds...");
 
-					callstmt.setString(1, senderAccountNumber);
-					callstmt.setString(2, recieverAccountNumber);
+					callstmt.setString(1, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(senderAccountNumber)))));
+					callstmt.setString(2, SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(recieverAccountNumber)))));
 					callstmt.setFloat(3, tranferAmount);
 					callstmt.execute();
 					log.debug("Sucessfully ran Transfer Funds procedure.");

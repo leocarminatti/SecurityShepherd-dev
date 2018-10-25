@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -94,9 +93,12 @@ public class UrlAccess3UserList extends HttpServlet {
 					log.debug("Decoded Cookie: " + decodedCookie);
 					currentUser = decodedCookie;
 				}
-
+				//#Hackathon DK - SQL Injectio
+				//PreparedStatement callstmt = conn.prepareStatement(
+				//		"SELECT userName FROM users WHERE userRole = \"admin\" OR userName = \"" + currentUser + "\";");
 				PreparedStatement callstmt = conn.prepareStatement(
-						"SELECT userName FROM users WHERE userRole = \"admin\" OR userName = \"" + currentUser + "\";");
+						"SELECT userName FROM users WHERE userRole = \"admin\" OR userName = ?;");
+				callstmt.setString(1, currentUser);
 				log.debug("Getting User List");
 				htmlOutput = new String();
 				ResultSet rs = callstmt.executeQuery();

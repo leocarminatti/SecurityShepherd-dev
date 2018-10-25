@@ -20,6 +20,7 @@ import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 
 import utils.ShepherdLogManager;
+import utils.SqlFilter;
 import utils.Validate;
 import dbProcs.Database;
 
@@ -80,8 +81,7 @@ public class DirectObject1 extends HttpServlet {
 			log.debug(levelName + " servlet accessed by: " + ses.getAttribute("userName").toString());
 			PrintWriter out = response.getWriter();
 			out.print(getServletInfo());
-
-			String userId = request.getParameter("userId[]");
+			String userId = SqlFilter.levelOne(SqlFilter.levelTwo(SqlFilter.levelThree(SqlFilter.levelFour(request.getParameter("userId[]")))));
 			log.debug("User Submitted - " + userId);
 			String ApplicationRoot = getServletContext().getRealPath("");
 			log.debug("Servlet root = " + ApplicationRoot);

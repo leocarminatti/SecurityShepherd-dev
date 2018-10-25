@@ -227,6 +227,7 @@ public class Validate
 	public static boolean validateAdminSession(HttpSession ses)
 	{
 		boolean result = false;
+		@SuppressWarnings("unused")
 		String userName = new String();
 		if (ses == null)
 		{
@@ -275,7 +276,6 @@ public class Validate
 	public static boolean validateAdminSession(HttpSession ses, Cookie cookieToken, Object requestToken)
 	{
 		boolean result = false;
-		String userName = new String();
 		if (ses == null)
 		{
 			log.debug("No Session Found");
@@ -294,7 +294,8 @@ public class Validate
 				{
 					try 
 					{
-						userName = (String) ses.getAttribute("userName");
+						@SuppressWarnings("unused")
+						String userName = (String) ses.getAttribute("userName");
 						String role = (String) ses.getAttribute("userRole");
 						result = (role.compareTo("admin") == 0);
 						if(!result)
