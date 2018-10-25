@@ -87,7 +87,12 @@ public class SqlInjection6 extends HttpServlet
 				log.debug("searchTerm decoded to - " + userPin);
 				
 				log.debug("Looking for users");
-				PreparedStatement prepstmt = conn.prepareStatement("SELECT userName FROM users WHERE userPin = '" + userPin + "'");
+				//#Hackathon DK - SQL Injection
+				//PreparedStatement prepstmt = 
+				//		conn.prepareStatement("SELECT userName FROM users WHERE userPin = '" + userPin + "'");
+				PreparedStatement prepstmt = 
+						conn.prepareStatement("SELECT userName FROM users WHERE userPin =?");
+				prepstmt.setString(1, userPin);				
 				ResultSet users = prepstmt.executeQuery();
 				try
 				{

@@ -3,6 +3,7 @@ package servlets.module.challenge;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -77,22 +78,24 @@ public class SqlInjection1 extends HttpServlet
 			
 			String htmlOutput = new String();
 			
-			Connection conn = null;
-			Statement stmt = null;
-			ResultSet resultSet = null;
+			String ApplicationRoot = getServletContext().getRealPath("");
+			log.debug("Servlet root = " + ApplicationRoot );
+			Connection conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeOne");
 			
 			try
 			{
 				String aUserId = request.getParameter("aUserId");
 				log.debug("User Submitted - " + aUserId);
-				String ApplicationRoot = getServletContext().getRealPath("");
-				log.debug("Servlet root = " + ApplicationRoot );
+
 				
 				log.debug("Getting Connection to Database");
-				conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeOne");
-				stmt = conn.createStatement();
-				log.debug("Gathering result set");
-				resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerId = \"" + aUserId + "\"");
+				
+				//#Hackathon DK - SQL Injection
+				String query = "SELECT * FROM customers WHERE customerId =?";
+				PreparedStatement stmt = conn.prepareStatement(query);
+				stmt.setString(1, aUserId);			
+				ResultSet resultSet = stmt.executeQuery();				
+				//ResultSet resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerId = \"" + aUserId + "\"");
 				
 				int i = 0;
 				htmlOutput = "<h2 class='title'>" + bundle.getString("response.searchResults")+ "</h2>";

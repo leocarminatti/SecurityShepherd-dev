@@ -70,9 +70,7 @@ public class SqlInjection5 extends HttpServlet
 			String htmlOutput = new String();
 			String applicationRoot = getServletContext().getRealPath("");
 			
-			Connection conn = null;
-			PreparedStatement prepstmt = null;
-			ResultSet coupons = null;
+			Connection conn = Database.getChallengeConnection(applicationRoot, "SqlInjectionChallenge5Shop");
 			
 			try
 			{
@@ -98,13 +96,13 @@ public class SqlInjection5 extends HttpServlet
 				int perCentOffNotBad = 0; // Will search for coupons in DB and update this int
 				
 				htmlOutput = new String();
-				conn = Database.getChallengeConnection(applicationRoot, "SqlInjectionChallenge5Shop");
+				
 				log.debug("Looking for Coupons");
-				prepstmt = conn.prepareStatement("SELECT itemId, perCentOff FROM coupons WHERE couponCode = ?"
+				PreparedStatement prepstmt = conn.prepareStatement("SELECT itemId, perCentOff FROM coupons WHERE couponCode = ?"
 						+ "UNION SELECT itemId, perCentOff FROM vipCoupons WHERE couponCode = ?");
 				prepstmt.setString(1, couponCode);
 				prepstmt.setString(2, couponCode);
-				coupons = prepstmt.executeQuery();
+				ResultSet coupons = prepstmt.executeQuery();
 				try
 				{
 					if(coupons.next())

@@ -3,6 +3,7 @@ package servlets.module.challenge;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -79,9 +80,8 @@ public class SqlInjection3 extends HttpServlet
 			out.print(getServletInfo());
 			String htmlOutput = new String();
 			
-			Connection conn = null;
-			Statement stmt = null;
-			ResultSet resultSet = null;
+			String ApplicationRoot = getServletContext().getRealPath("");
+			Connection 	conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeThree");
 			
 			try
 			{
@@ -89,15 +89,18 @@ public class SqlInjection3 extends HttpServlet
 				log.debug("User Submitted - " + theUserName);
 				theUserName = SqlFilter.levelThree(theUserName);
 				log.debug("Filtered to " + theUserName);
-				String ApplicationRoot = getServletContext().getRealPath("");
+				
 				log.debug("Servlet root = " + ApplicationRoot );
 				
 				log.debug("Getting Connection to Database");
-				conn = Database.getChallengeConnection(ApplicationRoot, "SqlChallengeThree");
-				stmt = conn.createStatement();
-				log.debug("Gathering result set");
-				resultSet = stmt.executeQuery("SELECT customerName FROM customers WHERE customerName = '" + theUserName + "'");
-		
+
+				//#Hackathon DK - SQL Injection
+				String query = "SELECT customerName FROM customers WHERE customerName =?";
+				PreparedStatement stmt = conn.prepareStatement(query);
+				stmt.setString(1, theUserName);			
+				ResultSet resultSet = stmt.executeQuery();					
+				//ResultSet resultSet = stmt.executeQuery("SELECT customerName FROM customers WHERE customerName = '" + theUserName + "'");
+				
 				int i = 0;
 				htmlOutput = "<h2 class='title'>" + bundle.getString("response.searchResults")+ "</h2>";;
 				htmlOutput += "<table><tr><th>"+ bundle.getString("response.table.name")+ "</th></tr>";

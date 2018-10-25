@@ -133,9 +133,9 @@ extends HttpServlet
 		try 
 		{
 			String query = "SELECT * FROM tb_users WHERE username = ?";
-			PreparedStatement stmt = conn.prepareStatement(query);
 			//#Hackathon DK - SQL Injection
 			//ResultSet resultSet = stmt.executeQuery("SELECT * FROM tb_users WHERE username = '" + username + "'");
+			PreparedStatement stmt = conn.prepareStatement(query);
 			stmt.setString(1, username);					
 			ResultSet resultSet = stmt.executeQuery(query);
 			

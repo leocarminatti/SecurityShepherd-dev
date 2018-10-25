@@ -3,6 +3,7 @@ package servlets.module.challenge;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -89,10 +90,11 @@ public class SqlInjectionEmail extends HttpServlet
 					
 					log.debug("Getting Connection to Database");
 					
-					Statement stmt = conn.createStatement();
-					log.debug("Gathering result set");
-					ResultSet resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerAddress = '" + userIdentity + "'");
-					
+					//ResultSet resultSet = stmt.executeQuery("SELECT * FROM customers WHERE customerAddress = '" + userIdentity + "'");
+					String query = "SELECT * FROM customers WHERE customerAddress = ?";
+					PreparedStatement stmt = conn.prepareStatement(query);
+					stmt.setString(1, userIdentity);					
+					ResultSet resultSet = stmt.executeQuery(query);	
 					int i = 0;
 					htmlOutput = "<h2 class='title'>" + bundle.getString("response.searchResults")+ "</h2>";
 					htmlOutput += "<table><tr><th>"+ bundle.getString("response.table.name") +"</th><th>"+ bundle.getString("response.table.address") +"</th><th>"+ bundle.getString("response.table.comment") +"</th></tr>";
