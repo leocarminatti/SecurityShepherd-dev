@@ -3,6 +3,7 @@ package servlets.module.lesson;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -128,17 +129,15 @@ extends HttpServlet
 	{
 		
 		String[][] result = new String[10][3];
+		Connection conn = Database.getSqlInjLessonConnection(ApplicationRoot);
 		try 
 		{
-			Connection conn = Database.getSqlInjLessonConnection(ApplicationRoot);
-			Statement stmt;
-			stmt = conn.createStatement();
-			//#Hackathon DK - SQL Injection
-			//ResultSet resultSet = stmt.executeQuery("SELECT * FROM tb_users WHERE username = '" + username + "'");
 			String query = "SELECT * FROM tb_users WHERE username = ?";
 			PreparedStatement stmt = conn.prepareStatement(query);
+			//#Hackathon DK - SQL Injection
+			//ResultSet resultSet = stmt.executeQuery("SELECT * FROM tb_users WHERE username = '" + username + "'");
 			stmt.setString(1, username);					
-			ResultSet resultSet = stmt.execute();
+			ResultSet resultSet = stmt.executeQuery(query);
 			
 			log.debug("Opening Result Set from query");
 			for(int i = 0; resultSet.next(); i++)
@@ -159,6 +158,9 @@ extends HttpServlet
 		catch (Exception e)
 		{
 			log.fatal("Error: " + e.toString());
+		}
+		finally {
+			Database.closeConnection(conn);
 		}
 		return result;
 	}
