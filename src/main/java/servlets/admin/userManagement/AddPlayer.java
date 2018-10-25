@@ -97,9 +97,13 @@ public class AddPlayer extends HttpServlet
 					//Validation
 					notNull = (userName != null && passWord != null);
 					log.debug("Ensuring strings are not empty");
-					notEmpty = (!userName.isEmpty() && !passWord.isEmpty());
+					if (notNull) {
+						notEmpty = (!userName.isEmpty() && !passWord.isEmpty());
+					}
 					log.debug("Validating passwords");
-					validPasswords = passWord.compareTo(passWordConfirm) == 0; // 0 returned if the same
+					if (passWord != null && passWordConfirm != null) {
+						validPasswords = passWord.compareTo(passWordConfirm) == 0; // 0 returned if the same
+					}
 					log.debug("Validating addresses");
 					validAddress = userAddress.compareTo(userAddressCnf) == 0;
 					if(userAddress.isEmpty())

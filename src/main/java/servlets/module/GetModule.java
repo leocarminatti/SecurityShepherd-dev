@@ -72,8 +72,9 @@ public class GetModule extends HttpServlet
 					
 					log.debug("Getting Parameters");
 					String moduleId = (String)request.getParameter("moduleId");;
+					if(moduleId != null) {
 					log.debug("moduleId = " + moduleId.toString());
-					
+					}
 					log.debug("Getting session parameters");
 					String userId = (String)ses.getAttribute("userStamp");
 					log.debug("userId = " + userId);
